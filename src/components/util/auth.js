@@ -73,6 +73,8 @@ const login = (event, update) => {
     	if(data.id > 0){
 	    	cookie.save('sso', data.AccessToken, { path: '/', domain: '.local.com', httpOnly: false });
 	    	update({
+    			error:false,
+    			msg: "",
     			user: {
     				logged: true,
     				cookie: data.AccessToken,
@@ -80,6 +82,13 @@ const login = (event, update) => {
     				userName: data.username
     			},
     			dialog:{open:false}
+    		});
+    	}else{
+        	update({
+    			user: {},
+    			error:true,
+    			msg: "Usuário ou senha inválidos!",
+    			dialog:{open:true}
     		});
     	}
     }).catch((error) => {
@@ -148,6 +157,8 @@ const logout = (update) => {
     }).then((data) => {
     	if(data.logout){
 	    	update({
+				error:true,
+				msg: "Usuário não logado!",
 				user: {
 					logged: false,
 					cookie: null,

@@ -56,7 +56,6 @@ class Login extends React.Component {
 	handleSubmit(event) {
 		login(event, this.props.update);
 		this.renderRedirect();
-//		this.props.update({dialog:{open:true}});
 		console.log(this.props);
 	}
 	
@@ -65,10 +64,7 @@ class Login extends React.Component {
 		return (
 			<Container component="main" maxWidth="xs">
 			{
-				state.error ? <CustomizedDialogs update={ this.props.update }  appState={this.props.appState}/> : this.renderRedirect()
-			}
-			{
-				state.error ? state.msg : this.renderRedirect()
+				state.error ? <CustomizedDialogs text={state.msg} update={ this.props.update }  appState={this.props.appState}/> : this.renderRedirect()
 			}
 				<CssBaseline />
 				<div style={{ marginTop: 64, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
