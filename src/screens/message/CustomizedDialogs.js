@@ -53,11 +53,7 @@ const DialogActions = withStyles(theme => ({
 class CustomizedDialogs extends React.Component {
 
   handleClose = () => {
-	  console.log(this.props);
-	  console.log(this.state);
-	  console.log(this.props.appState);
 	  this.props.update({dialog:{open:false}});
-	  console.log(this.props.appState);
   };
 
   render() {
@@ -69,7 +65,7 @@ class CustomizedDialogs extends React.Component {
           open={this.props.appState.dialog.open}
         >
           <DialogTitle id="customized-dialog-title" onClose={this.handleClose}>
-            Modal title
+          { this.props.title }
           </DialogTitle>
           <DialogContent dividers>
             <Typography gutterBottom>
@@ -88,7 +84,8 @@ class CustomizedDialogs extends React.Component {
 }
 
 CustomizedDialogs.propTypes = {
-	text: PropTypes.string
+	text: PropTypes.string,
+	title: PropTypes.string
 };
 
 export default CustomizedDialogs;

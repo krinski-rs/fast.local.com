@@ -64,7 +64,7 @@ class Login extends React.Component {
 		return (
 			<Container component="main" maxWidth="xs">
 			{
-				state.error ? <CustomizedDialogs text={state.msg} update={ this.props.update }  appState={this.props.appState}/> : this.renderRedirect()
+				state.error ? <CustomizedDialogs text={state.msg} title={"Erro"} update={ this.props.update }  appState={this.props.appState}/> : this.renderRedirect()
 			}
 				<CssBaseline />
 				<div style={{ marginTop: 64, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
