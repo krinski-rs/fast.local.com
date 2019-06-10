@@ -1,6 +1,6 @@
 import React from 'react';
-import { Route, Redirect, Switch } from 'react-router-dom'
-import PropTypes from 'prop-types';
+//import { Route, Redirect, Switch } from 'react-router-dom'
+//import PropTypes from 'prop-types';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
@@ -21,12 +21,7 @@ import Grid from '@material-ui/core/Grid';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import PeopleIcon from '@material-ui/icons/People';
-import BarChartIcon from '@material-ui/icons/BarChart';
-import LayersIcon from '@material-ui/icons/Layers';
 import ListSubheader from '@material-ui/core/ListSubheader';
-import DashboardIcon from '@material-ui/icons/Dashboard';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
@@ -37,7 +32,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-import { getCookie } from '../../components/util/auth';
+//import { getCookie } from '../../components/util/auth';
+import MenuBar from '../../components/menu/Menu';
 
 function MadeWithLove() {
 	return (
@@ -203,44 +199,11 @@ export default function Home() {
 	          </IconButton>
 	        </div>
 	        <Divider />
-	        <List>
 	        
 	        
-	        <div>
-	        <ListItem button>
-	          <ListItemIcon>
-	            <DashboardIcon />
-	          </ListItemIcon>
-	          <ListItemText primary="Dashboard" />
-	        </ListItem>
-	        <ListItem button>
-	          <ListItemIcon>
-	            <ShoppingCartIcon />
-	          </ListItemIcon>
-	          <ListItemText primary="Orders" />
-	        </ListItem>
-	        <ListItem button>
-	          <ListItemIcon>
-	            <PeopleIcon />
-	          </ListItemIcon>
-	          <ListItemText primary="Customers" />
-	        </ListItem>
-	        <ListItem button>
-	          <ListItemIcon>
-	            <BarChartIcon />
-	          </ListItemIcon>
-	          <ListItemText primary="Reports" />
-	        </ListItem>
-	        <ListItem button>
-	          <ListItemIcon>
-	            <LayersIcon />
-	          </ListItemIcon>
-	          <ListItemText primary="Integrations" />
-	        </ListItem>
-	      </div>	        
+	        <MenuBar />
 	        
 	        
-	        </List>
 	        <Divider />
 	        <List>
 	        
@@ -362,7 +325,7 @@ export default function Home() {
 	                </TableHead>
 	                <TableBody>
 	                  {rows.map(row => (
-	                    <TableRow key={row.id}>
+	                    <TableRow key={row.time + "__a"}>
 	                      <TableCell>{row.date}</TableCell>
 	                      <TableCell>{row.name}</TableCell>
 	                      <TableCell>{row.shipTo}</TableCell>
