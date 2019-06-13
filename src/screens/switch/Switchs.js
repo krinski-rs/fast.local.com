@@ -19,7 +19,11 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 
-import Footer from '../../components/footer/Footer';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
 import { withStyles, createMuiTheme } from '@material-ui/core/styles';
 import clsx from 'clsx';
@@ -121,12 +125,15 @@ const styles = {
 	},
 	fixedHeight: {
 		height: 240
+	},
+	table: {
+		minWidth: 650
 	}
 };
 
 const AdapterLink = React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />);
 
-class Home extends React.Component {
+class Switchs extends React.Component {
 	constructor(props) {
 		super(props);		
 		this.state = {
@@ -144,6 +151,7 @@ class Home extends React.Component {
 	
 	render() {
 		const fixedHeightPaper = clsx(this.props.classes.paper, this.props.classes.fixedHeight);
+		const date = new Date();
 		return (
 			<div className={ this.props.classes.root }>
 				<CssBaseline />
@@ -159,7 +167,7 @@ class Home extends React.Component {
 			      			<MenuIcon />
 			      		</IconButton>
 			      		<Typography component="h1" variant="h6" color="inherit" noWrap className={ this.props.classes.title }>
-				      		{ "Home" }
+				      		{ "Switch" }
 			      		</Typography>
 			      		<IconButton color="inherit">
 				      		<Badge badgeContent={4} color="secondary">
@@ -190,7 +198,7 @@ class Home extends React.Component {
 									<ListItemIcon>
 										<HomeIcon />
 									</ListItemIcon>
-									<ListItemText primary="Home" />
+									<ListItemText primary="Switchs" />
 								</ListItem>
 				        	</Link>
 							<Link component={AdapterLink} color="inherit" to="/switch">
@@ -236,7 +244,6 @@ class Home extends React.Component {
 					    </div>	        
 					</List>
 			        <Divider />
-			        
 					<List>
 						<div>
 							<ListSubheader inset>Mais Recentes</ListSubheader>
@@ -260,52 +267,40 @@ class Home extends React.Component {
 							</ListItem>
 						</div>
 					</List>
-
-			        
-			        
-			        
-			        
 			    </Drawer>
 			    <main className={ this.props.classes.content }>
 		        	<div className={ this.props.classes.appBarSpacer } />
 			        <Container maxWidth="lg" className={ this.props.classes.container }>
 		        		<Grid container spacing={3}>
-			        		<Grid item xs={12} md={8} lg={9}>
+			        		<Grid item xs={12} md={12} lg={12}>
 			        			<Paper className={fixedHeightPaper}>
-			        				<React.Fragment>
-			        					{ "kfkfkfkfkfk" }
-			        				</React.Fragment>
+				        	        <Table className={this.props.classes.table} size="small">
+				        	          <TableHead>
+				        	            <TableRow>
+				        	              <TableCell>Dessert (100g serving)</TableCell>
+				        	              <TableCell align="right">Calories</TableCell>
+				        	              <TableCell align="right">Fat&nbsp;(g)</TableCell>
+				        	              <TableCell align="right">Carbs&nbsp;(g)</TableCell>
+				        	              <TableCell align="right">Protein&nbsp;(g)</TableCell>
+				        	            </TableRow>
+				        	          </TableHead>
+				        	        </Table>
+
 			        			</Paper>
 			        		</Grid>
-			        		
-			        		
-			        		<Grid item xs={12} md={4} lg={3}>
-			        			<Paper className={fixedHeightPaper}>
-			        				<React.Fragment>
-			        					<Typography component="h2" variant="h6" color="primary" gutterBottom>
-			        						{"Recent Deposits"}
-			        					</Typography>
-			        					<Typography component="p" variant="h4">
-			        						$3,024.00
-			        					</Typography>
-			        					<Typography color="textSecondary" className={this.props.classes.depositContext}>
-			        						on 15 March, 2019
-			        					</Typography>
-			        					<div>
-			        						<Link color="primary" href="#">
-			        							View balance
-			        						</Link>
-			        					</div>
-			        				</React.Fragment>
-			        			</Paper>
-			        		</Grid>
-		        		</Grid>
+			        	</Grid>
 				    </Container>
-			    	<Footer />
+					<Typography variant="body2" color="textSecondary" align="center" display="flex" flex="1 0 auto" align-items="center" justify-content="space-between" margin-top="16px">
+						{'Copyright © '+date.getFullYear()+' All rights reserved  '}
+						<Link color="inherit" href="http://www.vogeltelecom.com" rel="noopener" target="_blank">
+							Vogel Telecom
+						</Link>
+						{' team.'}
+					</Typography>
 			    </main>
 			</div>
 		);
 	}
 }
 
-export default withStyles(styles)(Home);
+export default withStyles(styles)(Switchs);

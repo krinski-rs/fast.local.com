@@ -56,7 +56,6 @@ class Login extends React.Component {
 	handleSubmit(event) {
 		login(event, this.props.update);
 		this.renderRedirect();
-		console.log(this.props);
 	}
 	
 	render() {

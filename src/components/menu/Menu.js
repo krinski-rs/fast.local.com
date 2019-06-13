@@ -8,42 +8,70 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import SettingsInputAntennaIcon from '@material-ui/icons/SettingsInputAntenna';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import RouterIcon from '@material-ui/icons/Router';
+import HomeIcon from '@material-ui/icons/Home';
+import { Link as RouterLink } from 'react-router-dom';
+import Link from '@material-ui/core/Link';
 
-export default function Menu(props) {
-	return (
-		<List>
-			<div>
-				<ListItem button>
-					<ListItemIcon>
-						<RouterIcon />
-					</ListItemIcon>
-					<ListItemText primary="Switch" />
-				</ListItem>
-		        <ListItem button>
-		        	<ListItemIcon>
-		        		<DeviceHubIcon />
-		        	</ListItemIcon>
-		        	<ListItemText primary="VLans" />
-		        </ListItem>
-		        <ListItem button>
-		        	<ListItemIcon>
-		        		<SettingsIcon />
-		        	</ListItemIcon>
-		        	<ListItemText primary="Configurar" />
-		        </ListItem>
-		        <ListItem button>
-		        	<ListItemIcon>
-		        		<SettingsInputAntennaIcon />
-		        	</ListItemIcon>
-		        	<ListItemText primary="POP" />
-		        </ListItem>
-		        <ListItem button>
-		        	<ListItemIcon>
-		        		<DashboardIcon />
-		        	</ListItemIcon>
-		        	<ListItemText primary="Dashboard" />
-		        </ListItem>
-		    </div>	        
-		</List>
-	);
+const AdapterLink = React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />);
+
+class Menu extends React.Component {
+	
+	render() {
+		return (
+			<List>
+				<div>
+					<Link component={AdapterLink} color="inherit" to="/home">
+						<ListItem button>
+							<ListItemIcon>
+								<HomeIcon />
+							</ListItemIcon>
+							<ListItemText primary="Home" />
+						</ListItem>
+		        	</Link>
+					<Link component={AdapterLink} color="inherit" to="/switch">
+						<ListItem button>
+							<ListItemIcon>
+								<RouterIcon />
+							</ListItemIcon>
+							<ListItemText primary="Switch" />
+						</ListItem>
+		        	</Link>
+					<Link component={AdapterLink} color="inherit" to="/vlan">
+				        <ListItem button>
+				        	<ListItemIcon>
+				        		<DeviceHubIcon />
+				        	</ListItemIcon>
+				        	<ListItemText primary="VLans" />
+				        </ListItem>
+		        	</Link>
+					<Link component={AdapterLink} color="inherit" to="/pop">
+				        <ListItem button>
+				        	<ListItemIcon>
+				        		<SettingsInputAntennaIcon />
+				        	</ListItemIcon>
+				        	<ListItemText primary="POP" />
+				        </ListItem>
+		        	</Link>
+					<Link component={AdapterLink} color="inherit" to="/dashboard">
+				        <ListItem button>
+				        	<ListItemIcon>
+				        		<DashboardIcon />
+				        	</ListItemIcon>
+				        	<ListItemText primary="Dashboard" />
+				        </ListItem>
+		        	</Link>
+					<Link component={AdapterLink} color="inherit" to="/config">
+				        <ListItem button>
+				        	<ListItemIcon>
+				        		<SettingsIcon />
+				        	</ListItemIcon>
+				        	<ListItemText primary="Configurar" />
+				        </ListItem>
+		        	</Link>
+			    </div>	        
+			</List>
+		);
+	}
 }
+
+export default Menu;
