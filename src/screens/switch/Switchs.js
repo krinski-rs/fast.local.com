@@ -284,6 +284,7 @@ class Switchs extends React.Component {
 				        	              <TableCell align="right">Protein&nbsp;(g)</TableCell>
 				        	            </TableRow>
 				        	          </TableHead>
+				        	          <TableBody />
 				        	        </Table>
 
 			        			</Paper>

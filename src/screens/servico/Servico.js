@@ -39,7 +39,6 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import RouterIcon from '@material-ui/icons/Router';
 import HomeIcon from '@material-ui/icons/Home';
 import AssignmentIcon from '@material-ui/icons/Assignment';
-import TuneIcon from '@material-ui/icons/Tune';
 
 const drawerWidth = 240;
 const theme = createMuiTheme({
@@ -128,13 +127,32 @@ const styles = {
 		height: 240
 	},
 	table: {
-		minWidth: 650
+		minWidth: 700
 	}
 };
 
+const StyledTableCell = withStyles(theme => ({
+	  head: {
+	    backgroundColor: theme.palette.common.black,
+	    color: theme.palette.common.white,
+	  },
+	  body: {
+	    fontSize: 15,
+	  },
+	}))(TableCell);
+
+const StyledTableRow = withStyles(theme => ({
+  root: {
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.background.default,
+    },
+  },
+}))(TableRow);
+
+
 const AdapterLink = React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />);
 
-class Home extends React.Component {
+class Servico extends React.Component {
 	constructor(props) {
 		super(props);		
 		this.state = {
@@ -168,7 +186,7 @@ class Home extends React.Component {
 			      			<MenuIcon />
 			      		</IconButton>
 			      		<Typography component="h1" variant="h6" color="inherit" noWrap className={ this.props.classes.title }>
-				      		{ "Home" }
+				      		{ "Serviço" }
 			      		</Typography>
 			      		<IconButton color="inherit">
 				      		<Badge badgeContent={4} color="secondary">
@@ -234,20 +252,12 @@ class Home extends React.Component {
 						        	<ListItemText primary="Dashboard" />
 						        </ListItem>
 				        	</Link>
-							<Link component={AdapterLink} color="inherit" to="/servico">
+							<Link component={AdapterLink} color="inherit" to="/config">
 						        <ListItem button>
 						        	<ListItemIcon>
 						        		<SettingsIcon />
 						        	</ListItemIcon>
-						        	<ListItemText primary="Serviço" />
-						        </ListItem>
-				        	</Link>
-							<Link component={AdapterLink} color="inherit" to="/config">
-						        <ListItem button>
-						        	<ListItemIcon>
-						        		<TuneIcon />
-						        	</ListItemIcon>
-						        	<ListItemText primary="Configuração" />
+						        	<ListItemText primary="Configurar" />
 						        </ListItem>
 				        	</Link>
 					    </div>	        
@@ -280,22 +290,29 @@ class Home extends React.Component {
 			    <main className={ this.props.classes.content }>
 		        	<div className={ this.props.classes.appBarSpacer } />
 			        <Container maxWidth="lg" className={ this.props.classes.container }>
-		        		<Grid container spacing={3}>
+		        		<Grid container spacing={12}>
 			        		<Grid item xs={12} md={12} lg={12}>
 			        			<Paper className={fixedHeightPaper}>
 				        	        <Table className={this.props.classes.table} size="small">
-				        	          <TableHead>
-				        	            <TableRow>
-				        	              <TableCell>Dessert (100g serving)</TableCell>
-				        	              <TableCell align="right">Calories</TableCell>
-				        	              <TableCell align="right">Fat&nbsp;(g)</TableCell>
-				        	              <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-				        	              <TableCell align="right">Protein&nbsp;(g)</TableCell>
-				        	            </TableRow>
-				        	          </TableHead>
-				        	          <TableBody />
+				        	        	<TableHead>
+				        	        		<TableRow>
+				        	        			<StyledTableCell>ID</StyledTableCell>
+				        	        			<StyledTableCell align="right">Nome</StyledTableCell>
+				        	        			<StyledTableCell align="right">Status</StyledTableCell>
+				        	        			<StyledTableCell align="right">Data Cadastro</StyledTableCell>
+				        	        			<StyledTableCell align="right">&nbsp;</StyledTableCell>
+				        	        		</TableRow>
+				        	        	</TableHead>
+				        	        	<TableBody>
+				        	        		<StyledTableRow key={1}>
+				        	        			<StyledTableCell component="th" scope="row">a</StyledTableCell>
+				        	        			<StyledTableCell align="right">b</StyledTableCell>
+				        	        			<StyledTableCell align="right">c</StyledTableCell>
+				        	        			<StyledTableCell align="right">d</StyledTableCell>
+				        	        			<StyledTableCell align="right">e</StyledTableCell>
+				        	        		</StyledTableRow>
+				        	        	</TableBody>
 				        	        </Table>
-
 			        			</Paper>
 			        		</Grid>
 			        	</Grid>
@@ -313,4 +330,4 @@ class Home extends React.Component {
 	}
 }
 
-export default withStyles(styles)(Home);
+export default withStyles(styles)(Servico);
