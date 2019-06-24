@@ -300,7 +300,7 @@ class Home extends React.Component {
 			        		</Grid>
 			        	</Grid>
 				    </Container>
-					<Typography variant="body2" color="textSecondary" align="center" display="flex" flex="1 0 auto" align-items="center" justify-content="space-between" margin-top="16px">
+					<Typography variant="body2" color="textSecondary" align="center">
 						{'Copyright © '+date.getFullYear()+' All rights reserved  '}
 						<Link color="inherit" href="http://www.vogeltelecom.com" rel="noopener" target="_blank">
 							Vogel Telecom
