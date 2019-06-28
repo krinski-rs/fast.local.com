@@ -5,6 +5,7 @@ class AppState extends Component {
 		super(props);
 		this.state = {
 			error: false,
+			menuClick: true,
 			msg: "",
 			user: {
 				logged: false,

@@ -1,6 +1,5 @@
 
 const requests = (data, method, headers, endPoint, callback) => {
-//    return ;
 	if(data){
 	    return fetch(endPoint, {
 	    	method: method,
@@ -23,8 +22,7 @@ const requests = (data, method, headers, endPoint, callback) => {
 	    	}
 	    	return data;
 	    }).catch((error) => {
-	    	console.log("error");
-	    	console.log(error);
+	    	return error;
 	    });
 
 	}else{
@@ -48,8 +46,7 @@ const requests = (data, method, headers, endPoint, callback) => {
 	    	}
 	    	return data;
 	    }).catch((error) => {
-	    	console.log("error");
-	    	console.log(error);
+	    	return error;
 	    });
 
 	}

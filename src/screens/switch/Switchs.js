@@ -16,7 +16,6 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListSubheader from '@material-ui/core/ListSubheader';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -37,9 +36,12 @@ import SettingsInputAntennaIcon from '@material-ui/icons/SettingsInputAntenna';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import RouterIcon from '@material-ui/icons/Router';
 import HomeIcon from '@material-ui/icons/Home';
-import AssignmentIcon from '@material-ui/icons/Assignment';
+import TuneIcon from '@material-ui/icons/Tune';
+import PaletteIcon from '@material-ui/icons/Palette';
 
 import { AdapterLink, styles } from '../../components/util/config';
+import { getCookie, renderRedirect } from '../../components/util/auth';
+import { requests } from '../../components/util/request';
 
 
 class Switchs extends React.Component {
@@ -57,6 +59,16 @@ class Switchs extends React.Component {
 			open: !prevState.open
 		}));
 	}
+	
+//	componentDidMount() {
+//		if(!this.props.user || !this.props.user.logged || (this.props.user.cookie !== getCookie())){
+//			renderRedirect();
+//		}
+//	    requests(null, "POST", {
+//    		"Content-Type": "application/json",
+//    		"ApiKey": "3ada8f87cef4d41dbb385e41d0d55305b649161b"
+//    	}, "http://fast.api.local.com/api/pessoas/pessoa/");
+//	}
 	
 	render() {
 		const fixedHeightPaper = clsx(this.props.classes.paper, this.props.classes.fixedHeight);
@@ -101,81 +113,73 @@ class Switchs extends React.Component {
 			    	</div>
 			        <Divider />
 					<List>
-						<div>
-							<Link component={AdapterLink} color="inherit" to="/home">
-								<ListItem button>
-									<ListItemIcon>
-										<HomeIcon />
-									</ListItemIcon>
-									<ListItemText primary="Switchs" />
-								</ListItem>
-				        	</Link>
-							<Link component={AdapterLink} color="inherit" to="/switch">
-								<ListItem button>
-									<ListItemIcon>
-										<RouterIcon />
-									</ListItemIcon>
-									<ListItemText primary="Switch" />
-								</ListItem>
-				        	</Link>
-							<Link component={AdapterLink} color="inherit" to="/vlan">
-						        <ListItem button>
-						        	<ListItemIcon>
-						        		<DeviceHubIcon />
-						        	</ListItemIcon>
-						        	<ListItemText primary="VLans" />
-						        </ListItem>
-				        	</Link>
-							<Link component={AdapterLink} color="inherit" to="/pop">
-						        <ListItem button>
-						        	<ListItemIcon>
-						        		<SettingsInputAntennaIcon />
-						        	</ListItemIcon>
-						        	<ListItemText primary="POP" />
-						        </ListItem>
-				        	</Link>
-							<Link component={AdapterLink} color="inherit" to="/dashboard">
-						        <ListItem button>
-						        	<ListItemIcon>
-						        		<DashboardIcon />
-						        	</ListItemIcon>
-						        	<ListItemText primary="Dashboard" />
-						        </ListItem>
-				        	</Link>
-							<Link component={AdapterLink} color="inherit" to="/config">
-						        <ListItem button>
-						        	<ListItemIcon>
-						        		<SettingsIcon />
-						        	</ListItemIcon>
-						        	<ListItemText primary="Configurar" />
-						        </ListItem>
-				        	</Link>
-					    </div>	        
-					</List>
-			        <Divider />
-					<List>
-						<div>
-							<ListSubheader inset>Mais Recentes</ListSubheader>
+					<div>
+						<Link component={AdapterLink} color="inherit" to="/home">
 							<ListItem button>
 								<ListItemIcon>
-									<AssignmentIcon />
+									<HomeIcon />
 								</ListItemIcon>
-								<ListItemText primary="Current month" />
+								<ListItemText primary="Home" />
 							</ListItem>
+			        	</Link>
+						<Link component={AdapterLink} color="inherit" to="/switch">
 							<ListItem button>
 								<ListItemIcon>
-									<AssignmentIcon />
+									<RouterIcon />
 								</ListItemIcon>
-								<ListItemText primary="Last quarter" />
+								<ListItemText primary="Switch" />
 							</ListItem>
-							<ListItem button>
-								<ListItemIcon>
-									<AssignmentIcon />
-								</ListItemIcon>
-								<ListItemText primary="Year-end sale" />
-							</ListItem>
-						</div>
-					</List>
+			        	</Link>
+						<Link component={AdapterLink} color="inherit" to="/vlan">
+					        <ListItem button>
+					        	<ListItemIcon>
+					        		<DeviceHubIcon />
+					        	</ListItemIcon>
+					        	<ListItemText primary="VLan" />
+					        </ListItem>
+			        	</Link>
+						<Link component={AdapterLink} color="inherit" to="/pop">
+					        <ListItem button>
+					        	<ListItemIcon>
+					        		<SettingsInputAntennaIcon />
+					        	</ListItemIcon>
+					        	<ListItemText primary="POP" />
+					        </ListItem>
+			        	</Link>
+						<Link component={AdapterLink} color="inherit" to="/dashboard">
+					        <ListItem button>
+					        	<ListItemIcon>
+					        		<DashboardIcon />
+					        	</ListItemIcon>
+					        	<ListItemText primary="Dashboard" />
+					        </ListItem>
+			        	</Link>
+						<Link component={AdapterLink} color="inherit" to="/service">
+					        <ListItem button>
+					        	<ListItemIcon>
+					        		<SettingsIcon />
+					        	</ListItemIcon>
+					        	<ListItemText primary="Serviço" />
+					        </ListItem>
+			        	</Link>
+						<Link component={AdapterLink} color="inherit" to="/model">
+					        <ListItem button>
+					        	<ListItemIcon>
+					        		<PaletteIcon />
+					        	</ListItemIcon>
+					        	<ListItemText primary="Modelo de Switch" />
+					        </ListItem>
+			        	</Link>
+						<Link component={AdapterLink} color="inherit" to="/config">
+					        <ListItem button>
+					        	<ListItemIcon>
+					        		<TuneIcon />
+					        	</ListItemIcon>
+					        	<ListItemText primary="Configuração" />
+					        </ListItem>
+			        	</Link>
+				    </div>	        
+				</List>
 			    </Drawer>
 			    <main className={ this.props.classes.content }>
 		        	<div className={ this.props.classes.appBarSpacer } />
@@ -184,18 +188,17 @@ class Switchs extends React.Component {
 			        		<Grid item xs={12} md={12} lg={12}>
 			        			<Paper className={fixedHeightPaper}>
 				        	        <Table className={this.props.classes.table} size="small">
-				        	          <TableHead>
-				        	            <TableRow>
-				        	              <TableCell>Dessert (100g serving)</TableCell>
-				        	              <TableCell align="right">Calories</TableCell>
-				        	              <TableCell align="right">Fat&nbsp;(g)</TableCell>
-				        	              <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-				        	              <TableCell align="right">Protein&nbsp;(g)</TableCell>
-				        	            </TableRow>
-				        	          </TableHead>
-				        	          <TableBody />
+				        	        	<TableHead>
+				        	        		<TableRow>
+				        	        			<TableCell>Dessert (100g serving)</TableCell>
+				        	        			<TableCell align="right">Calories</TableCell>
+				        	        			<TableCell align="right">Fat&nbsp;(g)</TableCell>
+				        	        			<TableCell align="right">Carbs&nbsp;(g)</TableCell>
+				        	        			<TableCell align="right">Protein&nbsp;(g)</TableCell>
+				        	        		</TableRow>
+				        	        	</TableHead>
+				        	        	<TableBody />
 				        	        </Table>
-
 			        			</Paper>
 			        		</Grid>
 			        	</Grid>

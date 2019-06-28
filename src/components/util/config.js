@@ -77,20 +77,35 @@ export const styles = {
 		overflow: 'auto'
 	},
 	container: {
-		paddingTop: theme.spacing(4),
-		paddingBottom: theme.spacing(4)
+		paddingTop: theme.spacing(1),
+		paddingBottom: theme.spacing(2)
 	},
 	paper: {
-		padding: theme.spacing(2),
 		display: 'flex',
 		overflow: 'auto',
 		flexDirection: 'column',
+		minHeight: "440px"
+
 	},
 	fixedHeight: {
 		height: 240
 	},
 	table: {
 		minWidth: 650
+	},
+	addButton: {
+		margin: theme.spacing(1),
+		float: "right"
+	},
+	leftIcon: {
+		marginRight: theme.spacing(1)
+	},
+	iconSmall: {
+		fontSize: 20
+	},
+	formulario: {
+		display: 'flex',
+		flexWrap: 'wrap'
 	}
 };
 
