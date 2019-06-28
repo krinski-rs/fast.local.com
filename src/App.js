@@ -13,7 +13,7 @@ import Configuracao from './screens/configurar/Configuracao';
 import Pop from './screens/pop/Pop';
 import Dashboard from './screens/dashboard/Dashboard';
 import Service from './screens/service/Service';
-import Model from './screens/model/Models';
+import Template from './screens/template/Template';
 
 function PrivateRoute({ component: Component, ...rest }) {
 	return (
@@ -42,7 +42,7 @@ class App extends Component {
 					<PrivateRoute path="/pop" component={Pop} update={this.props.setAppState} {...state} />
 					<PrivateRoute path="/dashboard" component={Dashboard} update={this.props.setAppState} {...state} />
 					<PrivateRoute path="/service" component={Service} update={this.props.setAppState} {...state} />
-					<PrivateRoute path="/model" component={Model} update={this.props.setAppState} {...state} />
+					<PrivateRoute path="/template" component={Template} update={this.props.setAppState} {...state} />
 				</Switch>
 			</Router>
 		);

@@ -23,6 +23,12 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import MenuItem from '@material-ui/core/MenuItem';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+
 import { withStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 
@@ -143,18 +149,19 @@ function MySnackbarContentWrapper(props) {
 	);
 }
 
-class Service extends React.Component {
+class Template extends React.Component {
 	constructor(props) {
 		super(props);		
 		this.state = {
 			openDialog: false,
-			arrayService: [],
+			arrayTemplate: [],
 			error: false,
 			message: null,
-			variant: 'error'
+			variant: 'error',
+			brandValue: null
 		};
 		this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
-		this.updateServiceTable = this.updateServiceTable.bind(this);
+		this.updateTemplateTable = this.updateTemplateTable.bind(this);
 		this.openDialog = this.openDialog.bind(this);
 		this.save = this.save.bind(this);
 		this.list = this.list.bind(this);
@@ -184,19 +191,19 @@ class Service extends React.Component {
 	    requests(null, "GET", {
     		"Content-Type": "application/json",
     		"ApiKey": "3ada8f87cef4d41dbb385e41d0d55305b649161b"
-    	}, "http://fast.api.local.com/api/service/", this.updateServiceTable);
+    	}, "http://fast.api.local.com/api/service/", this.updateTemplateTable);
 	}
 	
 	list(){
 	    requests(null, "GET", {
     		"Content-Type": "application/json",
     		"ApiKey": "3ada8f87cef4d41dbb385e41d0d55305b649161b"
-    	}, "http://fast.api.local.com/api/service/", this.updateServiceTable);
+    	}, "http://fast.api.local.com/api/service/", this.updateTemplateTable);
 	}
 	
-	updateServiceTable(arrayService){
+	updateTemplateTable(arrayTemplate){
 		this.setState(prevState => ({
-			arrayService: arrayService
+			arrayTemplate: arrayTemplate
 		}));
 	}
 	
@@ -279,7 +286,14 @@ class Service extends React.Component {
 	    return retorno;
 	}
 	
+	handleChangeBrand(event) {
+		event.preventDefault();
+		this.setState(prevState => ({
+			brandValue: event.target.value
+		}));
+	}
 	render() {
+
 		const fixedHeightPaper = clsx(this.props.classes.paper, this.props.classes.fixedHeight);
 		const date = new Date();
 		return (
@@ -297,7 +311,7 @@ class Service extends React.Component {
 			      			<MenuIcon />
 			      		</IconButton>
 			      		<Typography component="h1" variant="h6" color="inherit" noWrap className={ this.props.classes.title }>
-				      		{ "Serviço" }
+				      		{ "Modelo de Switch" }
 			      		</Typography>
 			      		<IconButton color="inherit">
 				      		<Badge badgeContent={4} color="secondary">
@@ -398,7 +412,7 @@ class Service extends React.Component {
 		        			color="primary"
 		        			aria-label="Add"
 		        			className={this.props.classes.addButton}
-	        				title="Adicionar Serviço"
+	        				title="Adicionar Modelo"
 	        				onClick={this.openDialog}
 	        			>
 	        				<AddIcon />
@@ -418,7 +432,7 @@ class Service extends React.Component {
 				        	        	</TableHead>
 				        	        	<TableBody>
 				        	        	{
-				        	    			this.state.arrayService.map(function(obj, idx){
+				        	    			this.state.arrayTemplate.map(function(obj, idx){
 				        	            		return (
 				        	            			<StyledTableRow key={idx}>
 						        	        			<StyledTableCell align="right">{obj.id}</StyledTableCell>
@@ -446,12 +460,12 @@ class Service extends React.Component {
 						{' team.'}
 					</Typography>
 					<Dialog open={this.state.openDialog} onClose={this.openDialog} aria-labelledby="form-dialog-title">
-				    	<DialogTitle id="form-dialog-title">Novo Serviço</DialogTitle>
+				    	<DialogTitle id="form-dialog-title">Novo Modelo</DialogTitle>
 					    <form className={ this.props.classes.formulario } noValidate autoComplete="off" onSubmit={this.save}>			    	
 					    	<DialogContent>
 					    		<DialogContentText>
 					    			Preencha os campos abaixo e click em "Salvar" para inserir
-					    			um novo Serviço.<br/>
+					    			um novo Modelo de Switch.<br/>
 					    			Os campos com * são obrigatórios.
 					    		</DialogContentText>
 					    		<TextField
@@ -466,6 +480,21 @@ class Service extends React.Component {
 						            error={ this.state.error }
 					    			variant="outlined"
 						        />
+					    			<InputLabel htmlFor="brand">
+					    				Brand
+					    			</InputLabel>
+					    	        <Select
+					    	          value={this.state.brandValue}
+					    	          onChange={this.handleChangeBrand}
+					    	          input={<OutlinedInput labelWidth={1} name="brand" id="brand" />}
+					    	        >
+					    	          <MenuItem value="">
+					    	            <em>None</em>
+					    	          </MenuItem>
+					    	          <MenuItem value={10}>Ten</MenuItem>
+					    	          <MenuItem value={20}>Twenty</MenuItem>
+					    	          <MenuItem value={30}>Thirty</MenuItem>
+					    	        </Select>
 							</DialogContent>
 					    	<DialogActions>
 					    		<Button onClick={this.openDialog} color="primary">
@@ -501,5 +530,5 @@ class Service extends React.Component {
 	}
 }
 
-export default withStyles(styles)(Service);
+export default withStyles(styles)(Template);
 

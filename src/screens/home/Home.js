@@ -243,7 +243,7 @@ class Home extends React.Component {
 						        	<ListItemText primary="Serviço" />
 						        </ListItem>
 				        	</Link>
-							<Link component={AdapterLink} color="inherit" to="/model">
+							<Link component={AdapterLink} color="inherit" to="/template">
 						        <ListItem button>
 						        	<ListItemIcon>
 						        		<PaletteIcon />
