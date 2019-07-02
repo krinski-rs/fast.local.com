@@ -23,12 +23,6 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import MenuItem from '@material-ui/core/MenuItem';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-
 import { withStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 
@@ -36,13 +30,8 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import DeviceHubIcon from '@material-ui/icons/DeviceHub';
 import SettingsIcon from '@material-ui/icons/Settings';
-import SettingsInputAntennaIcon from '@material-ui/icons/SettingsInputAntenna';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import RouterIcon from '@material-ui/icons/Router';
 import HomeIcon from '@material-ui/icons/Home';
-import TuneIcon from '@material-ui/icons/Tune';
 import AddIcon from '@material-ui/icons/Add';
 import SaveIcon from '@material-ui/icons/Save';
 import ErrorIcon from '@material-ui/icons/Error';
@@ -53,7 +42,9 @@ import InfoIcon from '@material-ui/icons/Info';
 import PaletteIcon from '@material-ui/icons/Palette';
 
 import Button from '@material-ui/core/Button';
+
 import TextField from '@material-ui/core/TextField';
+
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -149,23 +140,25 @@ function MySnackbarContentWrapper(props) {
 	);
 }
 
-class Template extends React.Component {
+class SwitchModel extends React.Component {
 	constructor(props) {
 		super(props);		
 		this.state = {
 			openDialog: false,
-			arrayTemplate: [],
+			arraySwitchModel: [],
+			arrayBrand: [],
 			error: false,
 			message: null,
 			variant: 'error',
 			brandValue: null
 		};
 		this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
-		this.updateTemplateTable = this.updateTemplateTable.bind(this);
+		this.updateSwitchModelTable = this.updateSwitchModelTable.bind(this);
 		this.openDialog = this.openDialog.bind(this);
 		this.save = this.save.bind(this);
 		this.list = this.list.bind(this);
 		this.errorClose = this.errorClose.bind(this);
+		this.updateBrand = this.updateBrand.bind(this);
 	}
 	
 	handleDrawerOpen(event) {
@@ -191,19 +184,33 @@ class Template extends React.Component {
 	    requests(null, "GET", {
     		"Content-Type": "application/json",
     		"ApiKey": "3ada8f87cef4d41dbb385e41d0d55305b649161b"
-    	}, "http://fast.api.local.com/api/service/", this.updateTemplateTable);
+    	}, "http://fast.api.local.com/api/switchmodel/", this.updateSwitchModelTable);
+	    this.getBrands();
 	}
 	
 	list(){
 	    requests(null, "GET", {
     		"Content-Type": "application/json",
     		"ApiKey": "3ada8f87cef4d41dbb385e41d0d55305b649161b"
-    	}, "http://fast.api.local.com/api/service/", this.updateTemplateTable);
+    	}, "http://fast.api.local.com/api/switchmodel/", this.updateSwitchModelTable);
 	}
 	
-	updateTemplateTable(arrayTemplate){
+	getBrands(){
+	    requests(null, "GET", {
+    		"Content-Type": "application/json",
+    		"ApiKey": "3ada8f87cef4d41dbb385e41d0d55305b649161b"
+    	}, "http://fast.api.local.com/api/switchmodel/brand", this.updateBrand);
+	}
+	
+	updateSwitchModelTable(arraySwitchModel){
 		this.setState(prevState => ({
-			arrayTemplate: arrayTemplate
+			arraySwitchModel: ((arraySwitchModel.length > 0) ? arraySwitchModel : [])
+		}));
+	}
+	
+	updateBrand(arrayBrand){
+		this.setState(prevState => ({
+			arrayBrand: ((arrayBrand.length > 0) ? arrayBrand : [])
 		}));
 	}
 	
@@ -265,8 +272,7 @@ class Template extends React.Component {
 	    var retorno = requests(output, "POST", {
     		"Content-Type": "application/json",
     		"ApiKey": "3ada8f87cef4d41dbb385e41d0d55305b649161b"
-    	}, "http://fast.api.local.com/api/service/", this.list);
-	    console.log("retorno");
+    	}, "http://fast.api.local.com/api/switchmodel/", this.list);
 	    retorno = Promise.resolve(retorno);
 	    retorno = retorno.then((obj) => {
 		    if(!obj.hasOwnProperty('id') || !(parseInt(obj.id, 10) > 0)){
@@ -278,7 +284,7 @@ class Template extends React.Component {
 				this.setState(prevState => ({
 					openDialog: false,
 					error: true,
-					message: "Serviço cadastrado com sucesso!!!!",
+					message: "Switch Model cadastrado com sucesso!!!!",
 					variant: "success"
 				}));
 		    }
@@ -345,38 +351,6 @@ class Template extends React.Component {
 								<ListItemText primary="Home" />
 							</ListItem>
 			        	</Link>
-						<Link component={AdapterLink} color="inherit" to="/switch">
-							<ListItem button>
-								<ListItemIcon>
-									<RouterIcon />
-								</ListItemIcon>
-								<ListItemText primary="Switch" />
-							</ListItem>
-			        	</Link>
-						<Link component={AdapterLink} color="inherit" to="/vlan">
-					        <ListItem button>
-					        	<ListItemIcon>
-					        		<DeviceHubIcon />
-					        	</ListItemIcon>
-					        	<ListItemText primary="VLan" />
-					        </ListItem>
-			        	</Link>
-						<Link component={AdapterLink} color="inherit" to="/pop">
-					        <ListItem button>
-					        	<ListItemIcon>
-					        		<SettingsInputAntennaIcon />
-					        	</ListItemIcon>
-					        	<ListItemText primary="POP" />
-					        </ListItem>
-			        	</Link>
-						<Link component={AdapterLink} color="inherit" to="/dashboard">
-					        <ListItem button>
-					        	<ListItemIcon>
-					        		<DashboardIcon />
-					        	</ListItemIcon>
-					        	<ListItemText primary="Dashboard" />
-					        </ListItem>
-			        	</Link>
 						<Link component={AdapterLink} color="inherit" to="/service">
 					        <ListItem button>
 					        	<ListItemIcon>
@@ -385,7 +359,7 @@ class Template extends React.Component {
 					        	<ListItemText primary="Serviço" />
 					        </ListItem>
 			        	</Link>
-						<Link component={AdapterLink} color="inherit" to="/template">
+						<Link component={AdapterLink} color="inherit" to="/switchmodel">
 					        <ListItem button>
 					        	<ListItemIcon>
 					        		<PaletteIcon />
@@ -393,14 +367,6 @@ class Template extends React.Component {
 					        	<ListItemText primary="Modelo de Switch" />
 					        </ListItem>
 			        	</Link>
-						<Link component={AdapterLink} color="inherit" to="/config">
-					        <ListItem button>
-					        	<ListItemIcon>
-					        		<TuneIcon />
-					        	</ListItemIcon>
-					        	<ListItemText primary="Configuração" />
-					        </ListItem>
-		        	</Link>
 				    </div>	        
 				</List>
 			    </Drawer>
@@ -424,7 +390,8 @@ class Template extends React.Component {
 				        	        	<TableHead>
 				        	        		<TableRow>
 				        	        			<StyledTableCell align="right">ID</StyledTableCell>
-				        	        			<StyledTableCell align="right">Name</StyledTableCell>
+				        	        			<StyledTableCell align="right">Brand</StyledTableCell>
+				        	        			<StyledTableCell align="right">Model</StyledTableCell>
 				        	        			<StyledTableCell align="right">Active</StyledTableCell>
 				        	        			<StyledTableCell align="right">Created At</StyledTableCell>
 				        	        			<StyledTableCell align="right">Actions</StyledTableCell>
@@ -432,10 +399,11 @@ class Template extends React.Component {
 				        	        	</TableHead>
 				        	        	<TableBody>
 				        	        	{
-				        	    			this.state.arrayTemplate.map(function(obj, idx){
+				        	    			this.state.arraySwitchModel.map(function(obj, idx){
 				        	            		return (
 				        	            			<StyledTableRow key={idx}>
 						        	        			<StyledTableCell align="right">{obj.id}</StyledTableCell>
+						        	        			<StyledTableCell align="right">{obj.brand}</StyledTableCell>
 						        	        			<StyledTableCell align="right">{obj.name}</StyledTableCell>
 						        	        			<StyledTableCell align="right">{obj.active?"Yes":"No"}</StyledTableCell>
 						        	        			<StyledTableCell align="right">{obj.createdAt}</StyledTableCell>
@@ -480,21 +448,26 @@ class Template extends React.Component {
 						            error={ this.state.error }
 					    			variant="outlined"
 						        />
-					    			<InputLabel htmlFor="brand">
-					    				Brand
-					    			</InputLabel>
-					    	        <Select
-					    	          value={this.state.brandValue}
-					    	          onChange={this.handleChangeBrand}
-					    	          input={<OutlinedInput labelWidth={1} name="brand" id="brand" />}
-					    	        >
-					    	          <MenuItem value="">
-					    	            <em>None</em>
-					    	          </MenuItem>
-					    	          <MenuItem value={10}>Ten</MenuItem>
-					    	          <MenuItem value={20}>Twenty</MenuItem>
-					    	          <MenuItem value={30}>Thirty</MenuItem>
-					    	        </Select>
+						        <TextField
+									id="brand"
+									name="brand"
+									select
+									fullWidth
+						            required
+									label="Select Brand"
+									variant="outlined"
+									SelectProps={{
+										native: true
+									}}
+								>
+		        	        	{
+		        	    			this.state.arrayBrand.map(function(obj, idx){
+		        	            		return (
+		        	            			<option key={"brand_"+idx} value={obj}>{ obj }</option>
+				        	        	)
+		        	            	})
+		        	        	}
+					    		</TextField>
 							</DialogContent>
 					    	<DialogActions>
 					    		<Button onClick={this.openDialog} color="primary">
@@ -530,5 +503,5 @@ class Template extends React.Component {
 	}
 }
 
-export default withStyles(styles)(Template);
+export default withStyles(styles)(SwitchModel);
 

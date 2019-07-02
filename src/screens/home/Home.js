@@ -32,14 +32,9 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import DeviceHubIcon from '@material-ui/icons/DeviceHub';
 import SettingsIcon from '@material-ui/icons/Settings';
-import SettingsInputAntennaIcon from '@material-ui/icons/SettingsInputAntenna';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import RouterIcon from '@material-ui/icons/Router';
 import HomeIcon from '@material-ui/icons/Home';
 import AssignmentIcon from '@material-ui/icons/Assignment';
-import TuneIcon from '@material-ui/icons/Tune';
 import PaletteIcon from '@material-ui/icons/Palette';
 
 const drawerWidth = 240;
@@ -203,38 +198,6 @@ class Home extends React.Component {
 									<ListItemText primary="Home" />
 								</ListItem>
 				        	</Link>
-							<Link component={AdapterLink} color="inherit" to="/switch">
-								<ListItem button>
-									<ListItemIcon>
-										<RouterIcon />
-									</ListItemIcon>
-									<ListItemText primary="Switch" />
-								</ListItem>
-				        	</Link>
-							<Link component={AdapterLink} color="inherit" to="/vlan">
-						        <ListItem button>
-						        	<ListItemIcon>
-						        		<DeviceHubIcon />
-						        	</ListItemIcon>
-						        	<ListItemText primary="VLan" />
-						        </ListItem>
-				        	</Link>
-							<Link component={AdapterLink} color="inherit" to="/pop">
-						        <ListItem button>
-						        	<ListItemIcon>
-						        		<SettingsInputAntennaIcon />
-						        	</ListItemIcon>
-						        	<ListItemText primary="POP" />
-						        </ListItem>
-				        	</Link>
-							<Link component={AdapterLink} color="inherit" to="/dashboard">
-						        <ListItem button>
-						        	<ListItemIcon>
-						        		<DashboardIcon />
-						        	</ListItemIcon>
-						        	<ListItemText primary="Dashboard" />
-						        </ListItem>
-				        	</Link>
 							<Link component={AdapterLink} color="inherit" to="/service">
 						        <ListItem button>
 						        	<ListItemIcon>
@@ -243,20 +206,12 @@ class Home extends React.Component {
 						        	<ListItemText primary="Serviço" />
 						        </ListItem>
 				        	</Link>
-							<Link component={AdapterLink} color="inherit" to="/template">
+							<Link component={AdapterLink} color="inherit" to="/switchmodel">
 						        <ListItem button>
 						        	<ListItemIcon>
 						        		<PaletteIcon />
 						        	</ListItemIcon>
 						        	<ListItemText primary="Modelo de Switch" />
-						        </ListItem>
-				        	</Link>
-							<Link component={AdapterLink} color="inherit" to="/config">
-						        <ListItem button>
-						        	<ListItemIcon>
-						        		<TuneIcon />
-						        	</ListItemIcon>
-						        	<ListItemText primary="Configuração" />
 						        </ListItem>
 				        	</Link>
 					    </div>	        

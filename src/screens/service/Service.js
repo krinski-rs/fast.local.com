@@ -30,13 +30,8 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import DeviceHubIcon from '@material-ui/icons/DeviceHub';
 import SettingsIcon from '@material-ui/icons/Settings';
-import SettingsInputAntennaIcon from '@material-ui/icons/SettingsInputAntenna';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import RouterIcon from '@material-ui/icons/Router';
 import HomeIcon from '@material-ui/icons/Home';
-import TuneIcon from '@material-ui/icons/Tune';
 import AddIcon from '@material-ui/icons/Add';
 import SaveIcon from '@material-ui/icons/Save';
 import ErrorIcon from '@material-ui/icons/Error';
@@ -196,7 +191,7 @@ class Service extends React.Component {
 	
 	updateServiceTable(arrayService){
 		this.setState(prevState => ({
-			arrayService: arrayService
+			arrayService: ((arrayService.length > 0) ? arrayService : [])
 		}));
 	}
 	
@@ -252,14 +247,12 @@ class Service extends React.Component {
 	    	
 	    	item = entries.next().value;
 	    }
-//		console.log(output);
-//		return false;
 		
 	    var retorno = requests(output, "POST", {
     		"Content-Type": "application/json",
     		"ApiKey": "3ada8f87cef4d41dbb385e41d0d55305b649161b"
     	}, "http://fast.api.local.com/api/service/", this.list);
-	    console.log("retorno");
+
 	    retorno = Promise.resolve(retorno);
 	    retorno = retorno.then((obj) => {
 		    if(!obj.hasOwnProperty('id') || !(parseInt(obj.id, 10) > 0)){
@@ -331,38 +324,6 @@ class Service extends React.Component {
 								<ListItemText primary="Home" />
 							</ListItem>
 			        	</Link>
-						<Link component={AdapterLink} color="inherit" to="/switch">
-							<ListItem button>
-								<ListItemIcon>
-									<RouterIcon />
-								</ListItemIcon>
-								<ListItemText primary="Switch" />
-							</ListItem>
-			        	</Link>
-						<Link component={AdapterLink} color="inherit" to="/vlan">
-					        <ListItem button>
-					        	<ListItemIcon>
-					        		<DeviceHubIcon />
-					        	</ListItemIcon>
-					        	<ListItemText primary="VLan" />
-					        </ListItem>
-			        	</Link>
-						<Link component={AdapterLink} color="inherit" to="/pop">
-					        <ListItem button>
-					        	<ListItemIcon>
-					        		<SettingsInputAntennaIcon />
-					        	</ListItemIcon>
-					        	<ListItemText primary="POP" />
-					        </ListItem>
-			        	</Link>
-						<Link component={AdapterLink} color="inherit" to="/dashboard">
-					        <ListItem button>
-					        	<ListItemIcon>
-					        		<DashboardIcon />
-					        	</ListItemIcon>
-					        	<ListItemText primary="Dashboard" />
-					        </ListItem>
-			        	</Link>
 						<Link component={AdapterLink} color="inherit" to="/service">
 					        <ListItem button>
 					        	<ListItemIcon>
@@ -371,7 +332,7 @@ class Service extends React.Component {
 					        	<ListItemText primary="Serviço" />
 					        </ListItem>
 			        	</Link>
-						<Link component={AdapterLink} color="inherit" to="/template">
+						<Link component={AdapterLink} color="inherit" to="/switchmodel">
 					        <ListItem button>
 					        	<ListItemIcon>
 					        		<PaletteIcon />
@@ -379,14 +340,6 @@ class Service extends React.Component {
 					        	<ListItemText primary="Modelo de Switch" />
 					        </ListItem>
 			        	</Link>
-						<Link component={AdapterLink} color="inherit" to="/config">
-					        <ListItem button>
-					        	<ListItemIcon>
-					        		<TuneIcon />
-					        	</ListItemIcon>
-					        	<ListItemText primary="Configuração" />
-					        </ListItem>
-		        	</Link>
 				    </div>	        
 				</List>
 			    </Drawer>
