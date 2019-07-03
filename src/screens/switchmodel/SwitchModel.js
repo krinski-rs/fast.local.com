@@ -40,6 +40,9 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import WarningIcon from '@material-ui/icons/Warning';
 import InfoIcon from '@material-ui/icons/Info';
 import PaletteIcon from '@material-ui/icons/Palette';
+import SettingsInputAntennaIcon from '@material-ui/icons/SettingsInputAntenna';
+import RouterIcon from '@material-ui/icons/Router';
+import DeviceHubIcon from '@material-ui/icons/DeviceHub';
 
 import Button from '@material-ui/core/Button';
 
@@ -150,7 +153,6 @@ class SwitchModel extends React.Component {
 			error: false,
 			message: null,
 			variant: 'error',
-			brandValue: null
 		};
 		this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
 		this.updateSwitchModelTable = this.updateSwitchModelTable.bind(this);
@@ -169,7 +171,6 @@ class SwitchModel extends React.Component {
 	}
 	
 	errorClose(event){
-		event.preventDefault();
 		this.setState(prevState => ({
 			error: false,
 			message: null,
@@ -227,7 +228,7 @@ class SwitchModel extends React.Component {
 		event.preventDefault();
 		if (!event.target.checkValidity()) {
 			this.setState({error: true});
-			this.setState({message: "O campo não pode estar vazio."});
+			this.setState({message: "O campo com * não pode estar vazio."});
 			return false;
 		}
 		
@@ -266,8 +267,6 @@ class SwitchModel extends React.Component {
 	    	
 	    	item = entries.next().value;
 	    }
-//		console.log(output);
-//		return false;
 		
 	    var retorno = requests(output, "POST", {
     		"Content-Type": "application/json",
@@ -291,13 +290,7 @@ class SwitchModel extends React.Component {
 	    });
 	    return retorno;
 	}
-	
-	handleChangeBrand(event) {
-		event.preventDefault();
-		this.setState(prevState => ({
-			brandValue: event.target.value
-		}));
-	}
+
 	render() {
 
 		const fixedHeightPaper = clsx(this.props.classes.paper, this.props.classes.fixedHeight);
@@ -349,6 +342,30 @@ class SwitchModel extends React.Component {
 									<HomeIcon />
 								</ListItemIcon>
 								<ListItemText primary="Home" />
+							</ListItem>
+			        	</Link>
+						<Link component={AdapterLink} color="inherit" to="/pop">
+							<ListItem button>
+								<ListItemIcon>
+									<SettingsInputAntennaIcon />
+								</ListItemIcon>
+								<ListItemText primary="POP" />
+							</ListItem>
+			        	</Link>
+						<Link component={AdapterLink} color="inherit" to="/switchs">
+							<ListItem button>
+								<ListItemIcon>
+									<RouterIcon />
+								</ListItemIcon>
+								<ListItemText primary="Switchs" />
+							</ListItem>
+			        	</Link>
+						<Link component={AdapterLink} color="inherit" to="/vlan">
+							<ListItem button>
+								<ListItemIcon>
+									<DeviceHubIcon />
+								</ListItemIcon>
+								<ListItemText primary="Vlan" />
 							</ListItem>
 			        	</Link>
 						<Link component={AdapterLink} color="inherit" to="/service">
@@ -427,47 +444,54 @@ class SwitchModel extends React.Component {
 						</Link>
 						{' team.'}
 					</Typography>
-					<Dialog open={this.state.openDialog} onClose={this.openDialog} aria-labelledby="form-dialog-title">
+					<Dialog open={this.state.openDialog} onClose={this.openDialog} aria-labelledby="form-dialog-title" maxWidth="xs" scroll="paper">
 				    	<DialogTitle id="form-dialog-title">Novo Modelo</DialogTitle>
-					    <form className={ this.props.classes.formulario } noValidate autoComplete="off" onSubmit={this.save}>			    	
+					    <form noValidate autoComplete="off" onSubmit={this.save}>			    	
 					    	<DialogContent>
 					    		<DialogContentText>
 					    			Preencha os campos abaixo e click em "Salvar" para inserir
 					    			um novo Modelo de Switch.<br/>
 					    			Os campos com * são obrigatórios.
 					    		</DialogContentText>
-					    		<TextField
-					    			autoFocus
-						            margin="dense"
-						            id="name"
-						            name="name"
-						            label="Name"
-						            type="text"
-						            fullWidth
-						            required
-						            error={ this.state.error }
-					    			variant="outlined"
-						        />
-						        <TextField
-									id="brand"
-									name="brand"
-									select
-									fullWidth
-						            required
-									label="Select Brand"
-									variant="outlined"
-									SelectProps={{
-										native: true
-									}}
-								>
-		        	        	{
-		        	    			this.state.arrayBrand.map(function(obj, idx){
-		        	            		return (
-		        	            			<option key={"brand_"+idx} value={obj}>{ obj }</option>
-				        	        	)
-		        	            	})
-		        	        	}
-					    		</TextField>
+							    <Grid container spacing={3}>
+						    		<Grid item xs={12}>
+							    		<TextField
+							    			autoFocus
+								            margin="dense"
+								            id="name"
+								            name="name"
+								            label="Name"
+								            type="text"
+								            fullWidth
+								            required
+								            error={ this.state.error }
+							    			variant="outlined"
+								        />
+							        </Grid>
+						    		<Grid item xs={12}>
+								        <TextField
+											id="brand"
+											name="brand"
+											margin="dense"
+											select
+											fullWidth
+								            required
+											label="Select Brand"
+											variant="outlined"
+											SelectProps={{
+												native: true
+											}}
+										>
+				        	        	{
+				        	    			this.state.arrayBrand.map(function(obj, idx){
+				        	            		return (
+				        	            			<option key={"brand_"+idx} value={obj}>{ obj }</option>
+						        	        	)
+				        	            	})
+				        	        	}
+							    		</TextField>
+							        </Grid>
+						        </Grid>
 							</DialogContent>
 					    	<DialogActions>
 					    		<Button onClick={this.openDialog} color="primary">

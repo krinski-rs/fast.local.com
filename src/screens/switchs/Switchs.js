@@ -45,7 +45,9 @@ import RouterIcon from '@material-ui/icons/Router';
 import DeviceHubIcon from '@material-ui/icons/DeviceHub';
 
 import Button from '@material-ui/core/Button';
+
 import TextField from '@material-ui/core/TextField';
+
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -114,8 +116,6 @@ const StyledTableRow = withStyles(theme => ({
 	}
 }))(TableRow);
 
-
-
 function MySnackbarContentWrapper(props) {
 	const classes = useStyles1();
 	const { className, message, onClose, variant, ...other } = props;
@@ -141,22 +141,27 @@ function MySnackbarContentWrapper(props) {
 	);
 }
 
-class Service extends React.Component {
+class Switchs extends React.Component {
 	constructor(props) {
 		super(props);		
 		this.state = {
 			openDialog: false,
-			arrayService: [],
+			arraySwitchs: [],
+			arrayPop: [],
+			arraySwitchModel: [],
 			error: false,
 			message: null,
-			variant: 'error'
+			variant: 'error',
+			brandValue: null
 		};
 		this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
-		this.updateServiceTable = this.updateServiceTable.bind(this);
+		this.updateSwitchsTable = this.updateSwitchsTable.bind(this);
 		this.openDialog = this.openDialog.bind(this);
 		this.save = this.save.bind(this);
 		this.list = this.list.bind(this);
 		this.errorClose = this.errorClose.bind(this);
+		this.updatePops = this.updatePops.bind(this);
+		this.updateModels = this.updateModels.bind(this);
 	}
 	
 	handleDrawerOpen(event) {
@@ -166,7 +171,7 @@ class Service extends React.Component {
 		}));
 	}
 	
-	errorClose(event){
+	errorClose(){
 		this.setState(prevState => ({
 			error: false,
 			message: null,
@@ -181,24 +186,51 @@ class Service extends React.Component {
 	    requests(null, "GET", {
     		"Content-Type": "application/json",
     		"ApiKey": "3ada8f87cef4d41dbb385e41d0d55305b649161b"
-    	}, "http://fast.api.local.com/api/service/?active=true&removed=false", this.updateServiceTable);
+    	}, "http://fast.api.local.com/api/switchs/", this.updateSwitchsTable);
+	    this.getPops();
+	    this.getModels();
 	}
 	
 	list(){
 	    requests(null, "GET", {
     		"Content-Type": "application/json",
     		"ApiKey": "3ada8f87cef4d41dbb385e41d0d55305b649161b"
-    	}, "http://fast.api.local.com/api/service/", this.updateServiceTable);
+    	}, "http://fast.api.local.com/api/switchs/", this.updateSwitchsTable);
 	}
 	
-	updateServiceTable(arrayService){
+	updateSwitchsTable(arraySwitchs){
 		this.setState(prevState => ({
-			arrayService: ((arrayService.length > 0) ? arrayService : [])
+			arraySwitchs: ((arraySwitchs.length > 0) ? arraySwitchs : [])
 		}));
 	}
 	
-	openDialog(event){
-		event.preventDefault();
+	getPops(){
+	    requests(null, "GET", {
+    		"Content-Type": "application/json",
+    		"ApiKey": "3ada8f87cef4d41dbb385e41d0d55305b649161b"
+    	}, "http://fast.api.local.com/api/pop", this.updatePops);
+	}
+	
+	updatePops(arrayPop){
+		this.setState(prevState => ({
+			arrayPop: ((arrayPop.length > 0) ? arrayPop : [])
+		}));
+	}
+	
+	getModels(){
+	    requests(null, "GET", {
+    		"Content-Type": "application/json",
+    		"ApiKey": "3ada8f87cef4d41dbb385e41d0d55305b649161b"
+    	}, "http://fast.api.local.com/api/switchmodel", this.updateModels);
+	}
+	
+	updateModels(arraySwitchModel){
+		this.setState(prevState => ({
+			arraySwitchModel: ((arraySwitchModel.length > 0) ? arraySwitchModel : [])
+		}));
+	}
+	
+	openDialog(){
 		this.setState(prevState => ({
 			openDialog: !prevState.openDialog,
 			error: false,
@@ -253,8 +285,7 @@ class Service extends React.Component {
 	    var retorno = requests(output, "POST", {
     		"Content-Type": "application/json",
     		"ApiKey": "3ada8f87cef4d41dbb385e41d0d55305b649161b"
-    	}, "http://fast.api.local.com/api/service/", this.list);
-
+    	}, "http://fast.api.local.com/api/switchs/", this.list);
 	    retorno = Promise.resolve(retorno);
 	    retorno = retorno.then((obj) => {
 		    if(!obj.hasOwnProperty('id') || !(parseInt(obj.id, 10) > 0)){
@@ -266,7 +297,7 @@ class Service extends React.Component {
 				this.setState(prevState => ({
 					openDialog: false,
 					error: true,
-					message: "Serviço cadastrado com sucesso!!!!",
+					message: "Switch cadastrado com sucesso!!!!",
 					variant: "success"
 				}));
 		    }
@@ -274,7 +305,14 @@ class Service extends React.Component {
 	    return retorno;
 	}
 	
+	handleChangeBrand(event) {
+		event.preventDefault();
+		this.setState(prevState => ({
+			brandValue: event.target.value
+		}));
+	}
 	render() {
+
 		const fixedHeightPaper = clsx(this.props.classes.paper, this.props.classes.fixedHeight);
 		const date = new Date();
 		return (
@@ -292,7 +330,7 @@ class Service extends React.Component {
 			      			<MenuIcon />
 			      		</IconButton>
 			      		<Typography component="h1" variant="h6" color="inherit" noWrap className={ this.props.classes.title }>
-				      		{ "Serviço" }
+				      		{ "Switchs" }
 			      		</Typography>
 			      		<IconButton color="inherit">
 				      		<Badge badgeContent={4} color="secondary">
@@ -377,7 +415,7 @@ class Service extends React.Component {
 		        			color="primary"
 		        			aria-label="Add"
 		        			className={this.props.classes.addButton}
-	        				title="Adicionar Serviço"
+	        				title="Adicionar Switch"
 	        				onClick={this.openDialog}
 	        			>
 	        				<AddIcon />
@@ -389,7 +427,8 @@ class Service extends React.Component {
 				        	        	<TableHead>
 				        	        		<TableRow>
 				        	        			<StyledTableCell align="right">ID</StyledTableCell>
-				        	        			<StyledTableCell align="right">Name</StyledTableCell>
+				        	        			<StyledTableCell align="right">Brand</StyledTableCell>
+				        	        			<StyledTableCell align="right">Model</StyledTableCell>
 				        	        			<StyledTableCell align="right">Active</StyledTableCell>
 				        	        			<StyledTableCell align="right">Created At</StyledTableCell>
 				        	        			<StyledTableCell align="right">Actions</StyledTableCell>
@@ -397,10 +436,11 @@ class Service extends React.Component {
 				        	        	</TableHead>
 				        	        	<TableBody>
 				        	        	{
-				        	    			this.state.arrayService.map(function(obj, idx){
+				        	    			this.state.arraySwitchs.map(function(obj, idx){
 				        	            		return (
 				        	            			<StyledTableRow key={idx}>
 						        	        			<StyledTableCell align="right">{obj.id}</StyledTableCell>
+						        	        			<StyledTableCell align="right">{obj.brand}</StyledTableCell>
 						        	        			<StyledTableCell align="right">{obj.name}</StyledTableCell>
 						        	        			<StyledTableCell align="right">{obj.active?"Yes":"No"}</StyledTableCell>
 						        	        			<StyledTableCell align="right">{obj.createdAt}</StyledTableCell>
@@ -424,31 +464,121 @@ class Service extends React.Component {
 						</Link>
 						{' team.'}
 					</Typography>
-					<Dialog open={this.state.openDialog} onClose={this.openDialog} aria-labelledby="form-dialog-title" maxWidth="xs" scroll="paper">
-				    	<DialogTitle id="form-dialog-title">Novo Serviço</DialogTitle>
-					    <form noValidate autoComplete="off" onSubmit={this.save}>			    	
+					<Dialog open={this.state.openDialog} onClose={this.openDialog} aria-labelledby="form-dialog-title" maxWidth="md" scroll="paper">
+				    	<DialogTitle id="form-dialog-title">Novo Switch</DialogTitle>
+					    <form noValidate autoComplete="off" onSubmit={this.save}>
 					    	<DialogContent>
 					    		<DialogContentText>
 					    			Preencha os campos abaixo e click em "Salvar" para inserir
-					    			um novo Serviço.<br/>
+					    			um novo Switch.<br/>
 					    			Os campos com * são obrigatórios.
 					    		</DialogContentText>
 							    <Grid container spacing={3}>
-						    		<Grid item xs={12}>
+						    		<Grid item xs={12} md={12}>
 							    		<TextField
+							    			fullWidth
 							    			autoFocus
 								            margin="dense"
 								            id="name"
 								            name="name"
 								            label="Name"
 								            type="text"
-								            fullWidth
 								            required
-								            error={ this.state.error }
 							    			variant="outlined"
 								        />
-								    </Grid>
-							    </Grid>
+							        </Grid>
+						    		<Grid item xs={12} md={6}>
+								        <TextField
+											id="pop"
+											name="pop"
+									        margin="dense"
+											select
+											fullWidth
+								            required
+											label="Select Pop"
+											variant="outlined"
+											SelectProps={{
+												native: true,
+											}}
+										>
+				        	        	{
+				        	    			this.state.arrayPop.map(function(obj, idx){
+				        	            		return (
+		
+				        	            				<option key={"pop_"+idx} value={obj.id}>{ obj.name }</option>
+						        	        	)
+				        	            	})
+				        	        	}
+							    		</TextField>
+							        </Grid>
+						    		<Grid item xs={12} md={6}>
+								        <TextField
+											id="switch_model"
+											name="switch_model"
+										    margin="dense"
+											select
+											fullWidth
+								            required
+											label="Select Model"
+											variant="outlined"
+											SelectProps={{
+												native: true,
+											}}
+										>
+				        	        	{
+				        	    			this.state.arraySwitchModel.map(function(obj, idx){
+				        	            		return (
+				        	            			<option key={"brand_"+idx} value={obj.id}>{ obj.brand + "-" +obj.name }</option>
+						        	        	)
+				        	            	})
+				        	        	}
+							    		</TextField>
+							        </Grid>
+						    		<Grid item xs={12} md={6}>
+							    		<TextField
+						            		margin="dense"
+								            id="username"
+								            name="username"
+								            label="Username"
+								            type="text"
+								            fullWidth
+							    			variant="outlined"
+								        />
+							        </Grid>
+						    		<Grid item xs={12} md={6}>
+							    		<TextField
+						            		margin="dense"
+								            id="password"
+								            name="password"
+								            label="Password"
+								            type="text"
+								            fullWidth
+							    			variant="outlined"
+								        />
+							        </Grid>
+						    		<Grid item xs={12} md={6}>
+							    		<TextField
+						            		margin="dense"
+								            id="address_ipv4"
+								            name="address_ipv4"
+								            label="IPV4 Address"
+								            type="text"
+								            fullWidth
+							    			variant="outlined"
+								        />
+							        </Grid>
+						    		<Grid item xs={12} md={6}>
+							    		<TextField
+							            	margin="dense"
+								            id="address_ipv6"
+								            name="address_ipv6"
+								            label="IPV6 Address"
+								            type="text"
+								            fullWidth
+							    			variant="outlined"
+								        />
+							        </Grid>
+						        </Grid>
 							</DialogContent>
 					    	<DialogActions>
 					    		<Button onClick={this.openDialog} color="primary">
@@ -484,4 +614,5 @@ class Service extends React.Component {
 	}
 }
 
-export default withStyles(styles)(Service);
+export default withStyles(styles)(Switchs);
+
