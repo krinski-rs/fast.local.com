@@ -36,6 +36,9 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import HomeIcon from '@material-ui/icons/Home';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import PaletteIcon from '@material-ui/icons/Palette';
+import SettingsInputAntennaIcon from '@material-ui/icons/SettingsInputAntenna';
+import RouterIcon from '@material-ui/icons/Router';
+import DeviceHubIcon from '@material-ui/icons/DeviceHub';
 
 const drawerWidth = 240;
 const theme = createMuiTheme({
@@ -196,6 +199,30 @@ class Home extends React.Component {
 										<HomeIcon />
 									</ListItemIcon>
 									<ListItemText primary="Home" />
+								</ListItem>
+				        	</Link>
+							<Link component={AdapterLink} color="inherit" to="/pop">
+								<ListItem button>
+									<ListItemIcon>
+										<SettingsInputAntennaIcon />
+									</ListItemIcon>
+									<ListItemText primary="POP" />
+								</ListItem>
+				        	</Link>
+							<Link component={AdapterLink} color="inherit" to="/switchs">
+								<ListItem button>
+									<ListItemIcon>
+										<RouterIcon />
+									</ListItemIcon>
+									<ListItemText primary="Switchs" />
+								</ListItem>
+				        	</Link>
+							<Link component={AdapterLink} color="inherit" to="/vlan">
+								<ListItem button>
+									<ListItemIcon>
+										<DeviceHubIcon />
+									</ListItemIcon>
+									<ListItemText primary="Vlan" />
 								</ListItem>
 				        	</Link>
 							<Link component={AdapterLink} color="inherit" to="/service">

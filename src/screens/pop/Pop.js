@@ -45,7 +45,9 @@ import RouterIcon from '@material-ui/icons/Router';
 import DeviceHubIcon from '@material-ui/icons/DeviceHub';
 
 import Button from '@material-ui/core/Button';
+
 import TextField from '@material-ui/core/TextField';
+
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -141,18 +143,20 @@ function MySnackbarContentWrapper(props) {
 	);
 }
 
-class Service extends React.Component {
+class Pop extends React.Component {
 	constructor(props) {
 		super(props);		
 		this.state = {
 			openDialog: false,
-			arrayService: [],
+			arrayPop: [],
+			arrayBrand: [],
 			error: false,
 			message: null,
-			variant: 'error'
+			variant: 'error',
+			brandValue: null
 		};
 		this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
-		this.updateServiceTable = this.updateServiceTable.bind(this);
+		this.updatePopTable = this.updatePopTable.bind(this);
 		this.openDialog = this.openDialog.bind(this);
 		this.save = this.save.bind(this);
 		this.list = this.list.bind(this);
@@ -166,7 +170,7 @@ class Service extends React.Component {
 		}));
 	}
 	
-	errorClose(event){
+	errorClose(){
 		this.setState(prevState => ({
 			error: false,
 			message: null,
@@ -181,23 +185,23 @@ class Service extends React.Component {
 	    requests(null, "GET", {
     		"Content-Type": "application/json",
     		"ApiKey": "3ada8f87cef4d41dbb385e41d0d55305b649161b"
-    	}, "http://fast.api.local.com/api/service/?active=true&removed=false", this.updateServiceTable);
+    	}, "http://fast.api.local.com/api/pop/", this.updatePopTable);
 	}
 	
 	list(){
 	    requests(null, "GET", {
     		"Content-Type": "application/json",
     		"ApiKey": "3ada8f87cef4d41dbb385e41d0d55305b649161b"
-    	}, "http://fast.api.local.com/api/service/", this.updateServiceTable);
+    	}, "http://fast.api.local.com/api/pop/", this.updatePopTable);
 	}
 	
-	updateServiceTable(arrayService){
+	updatePopTable(arrayPop){
 		this.setState(prevState => ({
-			arrayService: ((arrayService.length > 0) ? arrayService : [])
+			arrayPop: ((arrayPop.length > 0) ? arrayPop : [])
 		}));
 	}
 	
-	openDialog(event){
+	openDialog(){
 		event.preventDefault();
 		this.setState(prevState => ({
 			openDialog: !prevState.openDialog,
@@ -253,8 +257,7 @@ class Service extends React.Component {
 	    var retorno = requests(output, "POST", {
     		"Content-Type": "application/json",
     		"ApiKey": "3ada8f87cef4d41dbb385e41d0d55305b649161b"
-    	}, "http://fast.api.local.com/api/service/", this.list);
-
+    	}, "http://fast.api.local.com/api/pop/", this.list);
 	    retorno = Promise.resolve(retorno);
 	    retorno = retorno.then((obj) => {
 		    if(!obj.hasOwnProperty('id') || !(parseInt(obj.id, 10) > 0)){
@@ -266,7 +269,7 @@ class Service extends React.Component {
 				this.setState(prevState => ({
 					openDialog: false,
 					error: true,
-					message: "Serviço cadastrado com sucesso!!!!",
+					message: "Pop cadastrado com sucesso!!!!",
 					variant: "success"
 				}));
 		    }
@@ -274,7 +277,14 @@ class Service extends React.Component {
 	    return retorno;
 	}
 	
+	handleChangeBrand(event) {
+		event.preventDefault();
+		this.setState(prevState => ({
+			brandValue: event.target.value
+		}));
+	}
 	render() {
+
 		const fixedHeightPaper = clsx(this.props.classes.paper, this.props.classes.fixedHeight);
 		const date = new Date();
 		return (
@@ -292,7 +302,7 @@ class Service extends React.Component {
 			      			<MenuIcon />
 			      		</IconButton>
 			      		<Typography component="h1" variant="h6" color="inherit" noWrap className={ this.props.classes.title }>
-				      		{ "Serviço" }
+				      		{ "Pop" }
 			      		</Typography>
 			      		<IconButton color="inherit">
 				      		<Badge badgeContent={4} color="secondary">
@@ -377,7 +387,7 @@ class Service extends React.Component {
 		        			color="primary"
 		        			aria-label="Add"
 		        			className={this.props.classes.addButton}
-	        				title="Adicionar Serviço"
+	        				title="Adicionar Pop"
 	        				onClick={this.openDialog}
 	        			>
 	        				<AddIcon />
@@ -397,7 +407,7 @@ class Service extends React.Component {
 				        	        	</TableHead>
 				        	        	<TableBody>
 				        	        	{
-				        	    			this.state.arrayService.map(function(obj, idx){
+				        	    			this.state.arrayPop.map(function(obj, idx){
 				        	            		return (
 				        	            			<StyledTableRow key={idx}>
 						        	        			<StyledTableCell align="right">{obj.id}</StyledTableCell>
@@ -425,12 +435,12 @@ class Service extends React.Component {
 						{' team.'}
 					</Typography>
 					<Dialog open={this.state.openDialog} onClose={this.openDialog} aria-labelledby="form-dialog-title" maxWidth="xs" scroll="paper">
-				    	<DialogTitle id="form-dialog-title">Novo Serviço</DialogTitle>
+				    	<DialogTitle id="form-dialog-title">Novo Pop</DialogTitle>
 					    <form noValidate autoComplete="off" onSubmit={this.save}>			    	
 					    	<DialogContent>
 					    		<DialogContentText>
 					    			Preencha os campos abaixo e click em "Salvar" para inserir
-					    			um novo Serviço.<br/>
+					    			um novo Pop.<br/>
 					    			Os campos com * são obrigatórios.
 					    		</DialogContentText>
 							    <Grid container spacing={3}>
@@ -447,8 +457,8 @@ class Service extends React.Component {
 								            error={ this.state.error }
 							    			variant="outlined"
 								        />
-								    </Grid>
-							    </Grid>
+							        </Grid>
+						        </Grid>
 							</DialogContent>
 					    	<DialogActions>
 					    		<Button onClick={this.openDialog} color="primary">
@@ -484,4 +494,5 @@ class Service extends React.Component {
 	}
 }
 
-export default withStyles(styles)(Service);
+export default withStyles(styles)(Pop);
+

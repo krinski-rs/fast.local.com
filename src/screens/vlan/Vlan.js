@@ -45,7 +45,9 @@ import RouterIcon from '@material-ui/icons/Router';
 import DeviceHubIcon from '@material-ui/icons/DeviceHub';
 
 import Button from '@material-ui/core/Button';
+
 import TextField from '@material-ui/core/TextField';
+
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -141,22 +143,26 @@ function MySnackbarContentWrapper(props) {
 	);
 }
 
-class Service extends React.Component {
+class Vlan extends React.Component {
 	constructor(props) {
 		super(props);		
 		this.state = {
 			openDialog: false,
+			arrayVlan: [],
+			arrayStatus: [],
 			arrayService: [],
 			error: false,
 			message: null,
 			variant: 'error'
 		};
 		this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
-		this.updateServiceTable = this.updateServiceTable.bind(this);
+		this.updateVlanTable = this.updateVlanTable.bind(this);
 		this.openDialog = this.openDialog.bind(this);
 		this.save = this.save.bind(this);
 		this.list = this.list.bind(this);
 		this.errorClose = this.errorClose.bind(this);
+		this.updateStatus = this.updateStatus.bind(this);
+		this.updateService = this.updateService.bind(this);
 	}
 	
 	handleDrawerOpen(event) {
@@ -181,19 +187,47 @@ class Service extends React.Component {
 	    requests(null, "GET", {
     		"Content-Type": "application/json",
     		"ApiKey": "3ada8f87cef4d41dbb385e41d0d55305b649161b"
-    	}, "http://fast.api.local.com/api/service/?active=true&removed=false", this.updateServiceTable);
+    	}, "http://fast.api.local.com/api/vlan/", this.updateVlanTable);
+	    this.getStatus();
+	    this.getService();
 	}
 	
 	list(){
 	    requests(null, "GET", {
     		"Content-Type": "application/json",
     		"ApiKey": "3ada8f87cef4d41dbb385e41d0d55305b649161b"
-    	}, "http://fast.api.local.com/api/service/", this.updateServiceTable);
+    	}, "http://fast.api.local.com/api/vlan/", this.updateVlanTable);
 	}
 	
-	updateServiceTable(arrayService){
+	getStatus(){
+	    requests(null, "GET", {
+    		"Content-Type": "application/json",
+    		"ApiKey": "3ada8f87cef4d41dbb385e41d0d55305b649161b"
+    	}, "http://fast.api.local.com/api/vlan/status", this.updateStatus);
+	}
+	
+	getService(){
+	    requests(null, "GET", {
+    		"Content-Type": "application/json",
+    		"ApiKey": "3ada8f87cef4d41dbb385e41d0d55305b649161b"
+    	}, "http://fast.api.local.com/api/service/", this.updateService);
+	}
+	
+	updateService(arrayService){
 		this.setState(prevState => ({
 			arrayService: ((arrayService.length > 0) ? arrayService : [])
+		}));
+	}
+
+	updateStatus(arrayStatus){
+		this.setState(prevState => ({
+			arrayStatus: ((arrayStatus.length > 0) ? arrayStatus : [])
+		}));
+	}
+
+	updateVlanTable(arrayVlan){
+		this.setState(prevState => ({
+			arrayVlan: ((arrayVlan.length > 0) ? arrayVlan : [])
 		}));
 	}
 	
@@ -253,8 +287,7 @@ class Service extends React.Component {
 	    var retorno = requests(output, "POST", {
     		"Content-Type": "application/json",
     		"ApiKey": "3ada8f87cef4d41dbb385e41d0d55305b649161b"
-    	}, "http://fast.api.local.com/api/service/", this.list);
-
+    	}, "http://fast.api.local.com/api/vlan/", this.list);
 	    retorno = Promise.resolve(retorno);
 	    retorno = retorno.then((obj) => {
 		    if(!obj.hasOwnProperty('id') || !(parseInt(obj.id, 10) > 0)){
@@ -266,14 +299,14 @@ class Service extends React.Component {
 				this.setState(prevState => ({
 					openDialog: false,
 					error: true,
-					message: "Serviço cadastrado com sucesso!!!!",
+					message: "Vlan cadastrada com sucesso!!!!",
 					variant: "success"
 				}));
 		    }
 	    });
 	    return retorno;
 	}
-	
+
 	render() {
 		const fixedHeightPaper = clsx(this.props.classes.paper, this.props.classes.fixedHeight);
 		const date = new Date();
@@ -292,7 +325,7 @@ class Service extends React.Component {
 			      			<MenuIcon />
 			      		</IconButton>
 			      		<Typography component="h1" variant="h6" color="inherit" noWrap className={ this.props.classes.title }>
-				      		{ "Serviço" }
+				      		{ "Vlan" }
 			      		</Typography>
 			      		<IconButton color="inherit">
 				      		<Badge badgeContent={4} color="secondary">
@@ -377,7 +410,7 @@ class Service extends React.Component {
 		        			color="primary"
 		        			aria-label="Add"
 		        			className={this.props.classes.addButton}
-	        				title="Adicionar Serviço"
+	        				title="Adicionar Vlan"
 	        				onClick={this.openDialog}
 	        			>
 	        				<AddIcon />
@@ -389,7 +422,8 @@ class Service extends React.Component {
 				        	        	<TableHead>
 				        	        		<TableRow>
 				        	        			<StyledTableCell align="right">ID</StyledTableCell>
-				        	        			<StyledTableCell align="right">Name</StyledTableCell>
+				        	        			<StyledTableCell align="right">Tag ID</StyledTableCell>
+				        	        			<StyledTableCell align="right">Service</StyledTableCell>
 				        	        			<StyledTableCell align="right">Active</StyledTableCell>
 				        	        			<StyledTableCell align="right">Created At</StyledTableCell>
 				        	        			<StyledTableCell align="right">Actions</StyledTableCell>
@@ -397,11 +431,12 @@ class Service extends React.Component {
 				        	        	</TableHead>
 				        	        	<TableBody>
 				        	        	{
-				        	    			this.state.arrayService.map(function(obj, idx){
+				        	    			this.state.arrayVlan.map(function(obj, idx){
 				        	            		return (
 				        	            			<StyledTableRow key={idx}>
 						        	        			<StyledTableCell align="right">{obj.id}</StyledTableCell>
-						        	        			<StyledTableCell align="right">{obj.name}</StyledTableCell>
+						        	        			<StyledTableCell align="right">{obj.tagId}</StyledTableCell>
+						        	        			<StyledTableCell align="right">{obj.service.name}</StyledTableCell>
 						        	        			<StyledTableCell align="right">{obj.active?"Yes":"No"}</StyledTableCell>
 						        	        			<StyledTableCell align="right">{obj.createdAt}</StyledTableCell>
 						        	        			<StyledTableCell align="right">
@@ -425,30 +460,91 @@ class Service extends React.Component {
 						{' team.'}
 					</Typography>
 					<Dialog open={this.state.openDialog} onClose={this.openDialog} aria-labelledby="form-dialog-title" maxWidth="xs" scroll="paper">
-				    	<DialogTitle id="form-dialog-title">Novo Serviço</DialogTitle>
+				    	<DialogTitle id="form-dialog-title">Nova Vlan</DialogTitle>
 					    <form noValidate autoComplete="off" onSubmit={this.save}>			    	
 					    	<DialogContent>
 					    		<DialogContentText>
 					    			Preencha os campos abaixo e click em "Salvar" para inserir
-					    			um novo Serviço.<br/>
+					    			uma nova Vlan.<br/>
 					    			Os campos com * são obrigatórios.
 					    		</DialogContentText>
 							    <Grid container spacing={3}>
-						    		<Grid item xs={12}>
+						    		<Grid item xs={3}>
 							    		<TextField
 							    			autoFocus
 								            margin="dense"
-								            id="name"
-								            name="name"
-								            label="Name"
+								            id="tag_id"
+								            name="tag_id"
+								            label="Tag ID"
 								            type="text"
 								            fullWidth
 								            required
 								            error={ this.state.error }
 							    			variant="outlined"
 								        />
-								    </Grid>
-							    </Grid>
+							        </Grid>
+							    	<Grid item xs={9}>
+								        <TextField
+											id="status"
+											name="status"
+											margin="dense"
+											select
+											fullWidth
+								            required
+											label="Status"
+											variant="outlined"
+											SelectProps={{
+												native: true
+											}}
+										>
+				        	        	{
+				        	    			this.state.arrayStatus.map(function(obj, idx){
+				        	            		return (
+				        	            			<option key={"status_"+idx} value={obj}>{ obj }</option>
+						        	        	)
+				        	            	})
+				        	        	}
+							    		</TextField>
+							        </Grid>
+							    	<Grid item xs={12}>
+								        <TextField
+											id="service"
+											name="service"
+											margin="dense"
+											select
+											fullWidth
+								            required
+											label="Service"
+											variant="outlined"
+											SelectProps={{
+												native: true
+											}}
+										>
+				        	        	{
+				        	    			this.state.arrayService.map(function(obj, idx){
+				        	            		return (
+				        	            			<option key={"service_"+idx} value={obj.id}>{ obj.name }</option>
+						        	        	)
+				        	            	})
+				        	        	}
+							    		</TextField>
+							        </Grid>
+						    		<Grid item xs={12}>
+							    		<TextField
+							    			autoFocus
+								            margin="dense"
+								            id="description"
+								            name="description"
+								            label="Description"
+								            type="text"
+								            fullWidth
+								            multiline={ true }
+								            required
+								            error={ this.state.error }
+							    			variant="outlined"
+								        />
+							        </Grid>
+						        </Grid>
 							</DialogContent>
 					    	<DialogActions>
 					    		<Button onClick={this.openDialog} color="primary">
@@ -484,4 +580,5 @@ class Service extends React.Component {
 	}
 }
 
-export default withStyles(styles)(Service);
+export default withStyles(styles)(Vlan);
+
