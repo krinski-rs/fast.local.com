@@ -88,7 +88,7 @@ export const styles = {
 
 	},
 	fixedHeight: {
-		height: 240
+		minHeight: 480
 	},
 	table: {
 		minWidth: 650
@@ -102,10 +102,6 @@ export const styles = {
 	},
 	iconSmall: {
 		fontSize: 20
-	},
-	formulario: {
-		display: 'flex',
-		flexWrap: 'wrap'
 	}
 };
 

@@ -10,7 +10,6 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
-import Fab from '@material-ui/core/Fab';
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -22,6 +21,8 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TableFooter from '@material-ui/core/TableFooter';
+import TablePagination from '@material-ui/core/TablePagination';
 
 import { withStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
@@ -32,7 +33,6 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import SettingsIcon from '@material-ui/icons/Settings';
 import HomeIcon from '@material-ui/icons/Home';
-import AddIcon from '@material-ui/icons/Add';
 import SaveIcon from '@material-ui/icons/Save';
 import ErrorIcon from '@material-ui/icons/Error';
 import CloseIcon from '@material-ui/icons/Close';
@@ -116,8 +116,6 @@ const StyledTableRow = withStyles(theme => ({
 	}
 }))(TableRow);
 
-
-
 function MySnackbarContentWrapper(props) {
 	const classes = useStyles1();
 	const { className, message, onClose, variant, ...other } = props;
@@ -153,7 +151,10 @@ class Vlan extends React.Component {
 			arrayService: [],
 			error: false,
 			message: null,
-			variant: 'error'
+			variant: 'error',
+			rowsPerPage: 15,
+			total: 0,
+			offset: 0
 		};
 		this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
 		this.updateVlanTable = this.updateVlanTable.bind(this);
@@ -163,6 +164,8 @@ class Vlan extends React.Component {
 		this.errorClose = this.errorClose.bind(this);
 		this.updateStatus = this.updateStatus.bind(this);
 		this.updateService = this.updateService.bind(this);
+		this.handleChangePage = this.handleChangePage.bind(this);
+		this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
 	}
 	
 	handleDrawerOpen(event) {
@@ -184,19 +187,16 @@ class Vlan extends React.Component {
 		if(!this.props.user || !this.props.user.logged || (this.props.user.cookie !== getCookie())){
 			renderRedirect();
 		}
-	    requests(null, "GET", {
-    		"Content-Type": "application/json",
-    		"ApiKey": "3ada8f87cef4d41dbb385e41d0d55305b649161b"
-    	}, "http://fast.api.local.com/api/vlan/", this.updateVlanTable);
+	    this.list();
 	    this.getStatus();
 	    this.getService();
 	}
 	
-	list(){
+	list(offset = 0, limit = 15){
 	    requests(null, "GET", {
     		"Content-Type": "application/json",
     		"ApiKey": "3ada8f87cef4d41dbb385e41d0d55305b649161b"
-    	}, "http://fast.api.local.com/api/vlan/", this.updateVlanTable);
+    	}, "http://fast.api.local.com/api/vlan/?offset="+offset+"&limit="+limit, this.updateVlanTable);
 	}
 	
 	getStatus(){
@@ -227,7 +227,10 @@ class Vlan extends React.Component {
 
 	updateVlanTable(arrayVlan){
 		this.setState(prevState => ({
-			arrayVlan: ((arrayVlan.length > 0) ? arrayVlan : [])
+			arrayVlan: ((arrayVlan.data.length > 0) ? arrayVlan.data : []),
+			total: arrayVlan.total,
+			offset: arrayVlan.offset,
+			rowsPerPage: arrayVlan.limit
 		}));
 	}
 	
@@ -306,6 +309,14 @@ class Vlan extends React.Component {
 	    });
 	    return retorno;
 	}
+	
+	handleChangePage(event, newPage) {
+		this.list(newPage, this.state.rowsPerPage);
+	}
+	
+	handleChangeRowsPerPage(event) {
+		this.list(this.state.offset, parseInt(event.target.value, 10));
+	}
 
 	render() {
 		const fixedHeightPaper = clsx(this.props.classes.paper, this.props.classes.fixedHeight);
@@ -350,71 +361,61 @@ class Vlan extends React.Component {
 			    	</div>
 			        <Divider />
 					<List>
-					<div>
-						<Link component={AdapterLink} color="inherit" to="/home">
-							<ListItem button>
-								<ListItemIcon>
-									<HomeIcon />
-								</ListItemIcon>
-								<ListItemText primary="Home" />
-							</ListItem>
-			        	</Link>
-						<Link component={AdapterLink} color="inherit" to="/pop">
-							<ListItem button>
-								<ListItemIcon>
-									<SettingsInputAntennaIcon />
-								</ListItemIcon>
-								<ListItemText primary="POP" />
-							</ListItem>
-			        	</Link>
-						<Link component={AdapterLink} color="inherit" to="/switchs">
-							<ListItem button>
-								<ListItemIcon>
-									<RouterIcon />
-								</ListItemIcon>
-								<ListItemText primary="Switchs" />
-							</ListItem>
-			        	</Link>
-						<Link component={AdapterLink} color="inherit" to="/vlan">
-							<ListItem button>
-								<ListItemIcon>
-									<DeviceHubIcon />
-								</ListItemIcon>
-								<ListItemText primary="Vlan" />
-							</ListItem>
-			        	</Link>
-						<Link component={AdapterLink} color="inherit" to="/service">
-					        <ListItem button>
-					        	<ListItemIcon>
-					        		<SettingsIcon />
-					        	</ListItemIcon>
-					        	<ListItemText primary="Serviço" />
-					        </ListItem>
-			        	</Link>
-						<Link component={AdapterLink} color="inherit" to="/switchmodel">
-					        <ListItem button>
-					        	<ListItemIcon>
-					        		<PaletteIcon />
-					        	</ListItemIcon>
-					        	<ListItemText primary="Modelo de Switch" />
-					        </ListItem>
-			        	</Link>
-				    </div>	        
-				</List>
+						<div>
+							<Link component={AdapterLink} color="inherit" to="/home">
+								<ListItem button>
+									<ListItemIcon>
+										<HomeIcon />
+									</ListItemIcon>
+									<ListItemText primary="Home" />
+								</ListItem>
+				        	</Link>
+							<Link component={AdapterLink} color="inherit" to="/pop">
+								<ListItem button>
+									<ListItemIcon>
+										<SettingsInputAntennaIcon />
+									</ListItemIcon>
+									<ListItemText primary="POP" />
+								</ListItem>
+				        	</Link>
+							<Link component={AdapterLink} color="inherit" to="/switchs">
+								<ListItem button>
+									<ListItemIcon>
+										<RouterIcon />
+									</ListItemIcon>
+									<ListItemText primary="Switchs" />
+								</ListItem>
+				        	</Link>
+							<Link component={AdapterLink} color="inherit" to="/vlan">
+								<ListItem button>
+									<ListItemIcon>
+										<DeviceHubIcon />
+									</ListItemIcon>
+									<ListItemText primary="Vlan" />
+								</ListItem>
+				        	</Link>
+							<Link component={AdapterLink} color="inherit" to="/service">
+						        <ListItem button>
+						        	<ListItemIcon>
+						        		<SettingsIcon />
+						        	</ListItemIcon>
+						        	<ListItemText primary="Serviço" />
+						        </ListItem>
+				        	</Link>
+							<Link component={AdapterLink} color="inherit" to="/switchmodel">
+						        <ListItem button>
+						        	<ListItemIcon>
+						        		<PaletteIcon />
+						        	</ListItemIcon>
+						        	<ListItemText primary="Modelo de Switch" />
+						        </ListItem>
+				        	</Link>
+					    </div>	        
+					</List>
 			    </Drawer>
 			    <main className={ this.props.classes.content }>
 		        	<div className={ this.props.classes.appBarSpacer } />
 			        <Container maxWidth="lg" className={ this.props.classes.container }>
-	        			<Fab
-	        				size="small"
-		        			color="primary"
-		        			aria-label="Add"
-		        			className={this.props.classes.addButton}
-	        				title="Adicionar Vlan"
-	        				onClick={this.openDialog}
-	        			>
-	        				<AddIcon />
-	        			</Fab>
 		        		<Grid container spacing={3}>
 			        		<Grid item xs={12} md={12} lg={12}>
 			        			<Paper className={fixedHeightPaper}>
@@ -432,21 +433,38 @@ class Vlan extends React.Component {
 				        	        	<TableBody>
 				        	        	{
 				        	    			this.state.arrayVlan.map(function(obj, idx){
+				        	    				let date = new Date(obj.createdAt);
 				        	            		return (
 				        	            			<StyledTableRow key={idx}>
 						        	        			<StyledTableCell align="right">{obj.id}</StyledTableCell>
 						        	        			<StyledTableCell align="right">{obj.tagId}</StyledTableCell>
 						        	        			<StyledTableCell align="right">{obj.service.name}</StyledTableCell>
 						        	        			<StyledTableCell align="right">{obj.active?"Yes":"No"}</StyledTableCell>
-						        	        			<StyledTableCell align="right">{obj.createdAt}</StyledTableCell>
-						        	        			<StyledTableCell align="right">
-						        	        			
-						        	        			</StyledTableCell>
+						        	        			<StyledTableCell align="right">{date.toLocaleDateString()}</StyledTableCell>
+						        	        			<StyledTableCell align="right">&nbsp;</StyledTableCell>
 						        	        		</StyledTableRow>
 						        	        	)
 				        	            	})
 				        	        	}
 				        	        	</TableBody>
+				        	            <TableFooter>
+				        	            	<TableRow>
+				        	            		<TablePagination
+				        	            			rowsPerPageOptions={[15,50,100]}
+				        	            			colSpan={6}
+				        	            			count={this.state.total}
+				        	            			rowsPerPage={this.state.rowsPerPage}
+				        	            			page={this.state.offset}
+				        	            			labelRowsPerPage={'Limit'}
+				        	            			SelectProps={{
+				        	            				inputProps: { 'aria-label': 'Limit' },
+				        	            				native: true,
+				        	            			}}
+				        	            			onChangePage={this.handleChangePage}
+				        	            			onChangeRowsPerPage={this.handleChangeRowsPerPage}
+				        	            		/>
+				        	            	</TableRow>
+				        	        	</TableFooter>
 				        	        </Table>
 			        			</Paper>
 			        		</Grid>

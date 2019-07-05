@@ -10,7 +10,6 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
-import Fab from '@material-ui/core/Fab';
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -22,6 +21,8 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TableFooter from '@material-ui/core/TableFooter';
+import TablePagination from '@material-ui/core/TablePagination';
 
 import { withStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
@@ -32,7 +33,6 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import SettingsIcon from '@material-ui/icons/Settings';
 import HomeIcon from '@material-ui/icons/Home';
-import AddIcon from '@material-ui/icons/Add';
 import SaveIcon from '@material-ui/icons/Save';
 import ErrorIcon from '@material-ui/icons/Error';
 import CloseIcon from '@material-ui/icons/Close';
@@ -153,6 +153,9 @@ class SwitchModel extends React.Component {
 			error: false,
 			message: null,
 			variant: 'error',
+			rowsPerPage: 15,
+			total: 0,
+			offset: 0
 		};
 		this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
 		this.updateSwitchModelTable = this.updateSwitchModelTable.bind(this);
@@ -161,6 +164,8 @@ class SwitchModel extends React.Component {
 		this.list = this.list.bind(this);
 		this.errorClose = this.errorClose.bind(this);
 		this.updateBrand = this.updateBrand.bind(this);
+		this.handleChangePage = this.handleChangePage.bind(this);
+		this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
 	}
 	
 	handleDrawerOpen(event) {
@@ -182,18 +187,15 @@ class SwitchModel extends React.Component {
 		if(!this.props.user || !this.props.user.logged || (this.props.user.cookie !== getCookie())){
 			renderRedirect();
 		}
-	    requests(null, "GET", {
-    		"Content-Type": "application/json",
-    		"ApiKey": "3ada8f87cef4d41dbb385e41d0d55305b649161b"
-    	}, "http://fast.api.local.com/api/switchmodel/", this.updateSwitchModelTable);
+	    this.list();
 	    this.getBrands();
 	}
 	
-	list(){
+	list(offset = 0, limit = 15){
 	    requests(null, "GET", {
     		"Content-Type": "application/json",
     		"ApiKey": "3ada8f87cef4d41dbb385e41d0d55305b649161b"
-    	}, "http://fast.api.local.com/api/switchmodel/", this.updateSwitchModelTable);
+    	}, "http://fast.api.local.com/api/switchmodel/?offset="+offset+"&limit="+limit, this.updateSwitchModelTable);
 	}
 	
 	getBrands(){
@@ -205,10 +207,21 @@ class SwitchModel extends React.Component {
 	
 	updateSwitchModelTable(arraySwitchModel){
 		this.setState(prevState => ({
-			arraySwitchModel: ((arraySwitchModel.length > 0) ? arraySwitchModel : [])
+			arraySwitchModel: ((arraySwitchModel.data.length > 0) ? arraySwitchModel.data : []),
+			total: arraySwitchModel.total,
+			offset: arraySwitchModel.offset,
+			rowsPerPage: arraySwitchModel.limit
 		}));
 	}
 	
+	handleChangePage(event, newPage) {
+		this.list(newPage, this.state.rowsPerPage);
+	}
+	
+	handleChangeRowsPerPage(event) {
+		this.list(this.state.offset, parseInt(event.target.value, 10));
+	}
+
 	updateBrand(arrayBrand){
 		this.setState(prevState => ({
 			arrayBrand: ((arrayBrand.length > 0) ? arrayBrand : [])
@@ -390,16 +403,6 @@ class SwitchModel extends React.Component {
 			    <main className={ this.props.classes.content }>
 		        	<div className={ this.props.classes.appBarSpacer } />
 			        <Container maxWidth="lg" className={ this.props.classes.container }>
-	        			<Fab
-	        				size="small"
-		        			color="primary"
-		        			aria-label="Add"
-		        			className={this.props.classes.addButton}
-	        				title="Adicionar Modelo"
-	        				onClick={this.openDialog}
-	        			>
-	        				<AddIcon />
-	        			</Fab>
 		        		<Grid container spacing={3}>
 			        		<Grid item xs={12} md={12} lg={12}>
 			        			<Paper className={fixedHeightPaper}>
@@ -417,21 +420,38 @@ class SwitchModel extends React.Component {
 				        	        	<TableBody>
 				        	        	{
 				        	    			this.state.arraySwitchModel.map(function(obj, idx){
+				        	    				let date = new Date(obj.createdAt);
 				        	            		return (
 				        	            			<StyledTableRow key={idx}>
 						        	        			<StyledTableCell align="right">{obj.id}</StyledTableCell>
 						        	        			<StyledTableCell align="right">{obj.brand}</StyledTableCell>
 						        	        			<StyledTableCell align="right">{obj.name}</StyledTableCell>
 						        	        			<StyledTableCell align="right">{obj.active?"Yes":"No"}</StyledTableCell>
-						        	        			<StyledTableCell align="right">{obj.createdAt}</StyledTableCell>
-						        	        			<StyledTableCell align="right">
-						        	        			
-						        	        			</StyledTableCell>
+						        	        			<StyledTableCell align="right">{date.toLocaleDateString()}</StyledTableCell>
+						        	        			<StyledTableCell align="right">&nbsp;</StyledTableCell>
 						        	        		</StyledTableRow>
 						        	        	)
 				        	            	})
 				        	        	}
 				        	        	</TableBody>
+				        	            <TableFooter>
+				        	            	<TableRow>
+				        	            		<TablePagination
+				        	            			rowsPerPageOptions={[15,50,100]}
+				        	            			colSpan={6}
+				        	            			count={this.state.total}
+				        	            			rowsPerPage={this.state.rowsPerPage}
+				        	            			page={this.state.offset}
+				        	            			labelRowsPerPage={'Limit'}
+				        	            			SelectProps={{
+				        	            				inputProps: { 'aria-label': 'Limit' },
+				        	            				native: true,
+				        	            			}}
+				        	            			onChangePage={this.handleChangePage}
+				        	            			onChangeRowsPerPage={this.handleChangeRowsPerPage}
+				        	            		/>
+				        	            	</TableRow>
+				        	        	</TableFooter>
 				        	        </Table>
 			        			</Paper>
 			        		</Grid>

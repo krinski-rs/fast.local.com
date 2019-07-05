@@ -10,7 +10,6 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
-import Fab from '@material-ui/core/Fab';
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -22,6 +21,8 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TableFooter from '@material-ui/core/TableFooter';
+import TablePagination from '@material-ui/core/TablePagination';
 
 import { withStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
@@ -32,7 +33,6 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import SettingsIcon from '@material-ui/icons/Settings';
 import HomeIcon from '@material-ui/icons/Home';
-import AddIcon from '@material-ui/icons/Add';
 import SaveIcon from '@material-ui/icons/Save';
 import ErrorIcon from '@material-ui/icons/Error';
 import CloseIcon from '@material-ui/icons/Close';
@@ -149,10 +149,14 @@ class Switchs extends React.Component {
 			arraySwitchs: [],
 			arrayPop: [],
 			arraySwitchModel: [],
+			arrayVlan: [],
 			error: false,
 			message: null,
 			variant: 'error',
-			brandValue: null
+			brandValue: null,
+			rowsPerPage: 15,
+			total: 0,
+			offset: 0
 		};
 		this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
 		this.updateSwitchsTable = this.updateSwitchsTable.bind(this);
@@ -162,6 +166,9 @@ class Switchs extends React.Component {
 		this.errorClose = this.errorClose.bind(this);
 		this.updatePops = this.updatePops.bind(this);
 		this.updateModels = this.updateModels.bind(this);
+		this.updateVlans = this.updateVlans.bind(this);
+		this.handleChangePage = this.handleChangePage.bind(this);
+		this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
 	}
 	
 	handleDrawerOpen(event) {
@@ -183,24 +190,38 @@ class Switchs extends React.Component {
 		if(!this.props.user || !this.props.user.logged || (this.props.user.cookie !== getCookie())){
 			renderRedirect();
 		}
-	    requests(null, "GET", {
-    		"Content-Type": "application/json",
-    		"ApiKey": "3ada8f87cef4d41dbb385e41d0d55305b649161b"
-    	}, "http://fast.api.local.com/api/switchs/", this.updateSwitchsTable);
+	    this.list(0,15);
 	    this.getPops();
 	    this.getModels();
+	    this.getVlans();
 	}
 	
-	list(){
+	list(offset = 0, limit = 15){
 	    requests(null, "GET", {
     		"Content-Type": "application/json",
     		"ApiKey": "3ada8f87cef4d41dbb385e41d0d55305b649161b"
-    	}, "http://fast.api.local.com/api/switchs/", this.updateSwitchsTable);
+    	}, "http://fast.api.local.com/api/switchs/?offset="+offset+"&limit="+limit, this.updateSwitchsTable);
 	}
 	
 	updateSwitchsTable(arraySwitchs){
 		this.setState(prevState => ({
-			arraySwitchs: ((arraySwitchs.length > 0) ? arraySwitchs : [])
+			arraySwitchs: ((arraySwitchs.data.length > 0) ? arraySwitchs.data : []),
+			total: arraySwitchs.total,
+			offset: arraySwitchs.offset,
+			rowsPerPage: arraySwitchs.limit
+		}));
+	}
+	
+	getVlans(){
+	    requests(null, "GET", {
+    		"Content-Type": "application/json",
+    		"ApiKey": "3ada8f87cef4d41dbb385e41d0d55305b649161b"
+    	}, "http://fast.api.local.com/api/vlan", this.updateVlans);
+	}
+	
+	updateVlans(arrayVlan){
+		this.setState(prevState => ({
+			arrayVlan: ((arrayVlan.datalength > 0) ? arrayVlan.data : [])
 		}));
 	}
 	
@@ -226,7 +247,7 @@ class Switchs extends React.Component {
 	
 	updateModels(arraySwitchModel){
 		this.setState(prevState => ({
-			arraySwitchModel: ((arraySwitchModel.length > 0) ? arraySwitchModel : [])
+			arraySwitchModel: ((arraySwitchModel.data.length > 0) ? arraySwitchModel.data : [])
 		}));
 	}
 	
@@ -238,6 +259,14 @@ class Switchs extends React.Component {
 		}));
 	}
 	
+	handleChangePage(event, newPage) {
+		this.list(newPage, this.state.rowsPerPage);
+	}
+	
+	handleChangeRowsPerPage(event) {
+		this.list(this.state.offset, parseInt(event.target.value, 10));
+	}
+
 	save(event){
 		event.preventDefault();
 		if (!event.target.checkValidity()) {
@@ -355,71 +384,61 @@ class Switchs extends React.Component {
 			    	</div>
 			        <Divider />
 					<List>
-					<div>
-						<Link component={AdapterLink} color="inherit" to="/home">
-							<ListItem button>
-								<ListItemIcon>
-									<HomeIcon />
-								</ListItemIcon>
-								<ListItemText primary="Home" />
-							</ListItem>
-			        	</Link>
-						<Link component={AdapterLink} color="inherit" to="/pop">
-							<ListItem button>
-								<ListItemIcon>
-									<SettingsInputAntennaIcon />
-								</ListItemIcon>
-								<ListItemText primary="POP" />
-							</ListItem>
-			        	</Link>
-						<Link component={AdapterLink} color="inherit" to="/switchs">
-							<ListItem button>
-								<ListItemIcon>
-									<RouterIcon />
-								</ListItemIcon>
-								<ListItemText primary="Switchs" />
-							</ListItem>
-			        	</Link>
-						<Link component={AdapterLink} color="inherit" to="/vlan">
-							<ListItem button>
-								<ListItemIcon>
-									<DeviceHubIcon />
-								</ListItemIcon>
-								<ListItemText primary="Vlan" />
-							</ListItem>
-			        	</Link>
-						<Link component={AdapterLink} color="inherit" to="/service">
-					        <ListItem button>
-					        	<ListItemIcon>
-					        		<SettingsIcon />
-					        	</ListItemIcon>
-					        	<ListItemText primary="Serviço" />
-					        </ListItem>
-			        	</Link>
-						<Link component={AdapterLink} color="inherit" to="/switchmodel">
-					        <ListItem button>
-					        	<ListItemIcon>
-					        		<PaletteIcon />
-					        	</ListItemIcon>
-					        	<ListItemText primary="Modelo de Switch" />
-					        </ListItem>
-			        	</Link>
-				    </div>	        
-				</List>
+						<div>
+							<Link component={AdapterLink} color="inherit" to="/home">
+								<ListItem button>
+									<ListItemIcon>
+										<HomeIcon />
+									</ListItemIcon>
+									<ListItemText primary="Home" />
+								</ListItem>
+				        	</Link>
+							<Link component={AdapterLink} color="inherit" to="/pop">
+								<ListItem button>
+									<ListItemIcon>
+										<SettingsInputAntennaIcon />
+									</ListItemIcon>
+									<ListItemText primary="POP" />
+								</ListItem>
+				        	</Link>
+							<Link component={AdapterLink} color="inherit" to="/switchs">
+								<ListItem button>
+									<ListItemIcon>
+										<RouterIcon />
+									</ListItemIcon>
+									<ListItemText primary="Switchs" />
+								</ListItem>
+				        	</Link>
+							<Link component={AdapterLink} color="inherit" to="/vlan">
+								<ListItem button>
+									<ListItemIcon>
+										<DeviceHubIcon />
+									</ListItemIcon>
+									<ListItemText primary="Vlan" />
+								</ListItem>
+				        	</Link>
+							<Link component={AdapterLink} color="inherit" to="/service">
+						        <ListItem button>
+						        	<ListItemIcon>
+						        		<SettingsIcon />
+						        	</ListItemIcon>
+						        	<ListItemText primary="Serviço" />
+						        </ListItem>
+				        	</Link>
+							<Link component={AdapterLink} color="inherit" to="/switchmodel">
+						        <ListItem button>
+						        	<ListItemIcon>
+						        		<PaletteIcon />
+						        	</ListItemIcon>
+						        	<ListItemText primary="Modelo de Switch" />
+						        </ListItem>
+				        	</Link>
+					    </div>	        
+					</List>
 			    </Drawer>
 			    <main className={ this.props.classes.content }>
 		        	<div className={ this.props.classes.appBarSpacer } />
 			        <Container maxWidth="lg" className={ this.props.classes.container }>
-	        			<Fab
-	        				size="small"
-		        			color="primary"
-		        			aria-label="Add"
-		        			className={this.props.classes.addButton}
-	        				title="Adicionar Switch"
-	        				onClick={this.openDialog}
-	        			>
-	        				<AddIcon />
-	        			</Fab>
 		        		<Grid container spacing={3}>
 			        		<Grid item xs={12} md={12} lg={12}>
 			        			<Paper className={fixedHeightPaper}>
@@ -427,8 +446,12 @@ class Switchs extends React.Component {
 				        	        	<TableHead>
 				        	        		<TableRow>
 				        	        			<StyledTableCell align="right">ID</StyledTableCell>
-				        	        			<StyledTableCell align="right">Brand</StyledTableCell>
+				        	        			<StyledTableCell align="right">Name</StyledTableCell>
 				        	        			<StyledTableCell align="right">Model</StyledTableCell>
+				        	        			<StyledTableCell align="right">Vlan</StyledTableCell>
+				        	        			<StyledTableCell align="right">POP</StyledTableCell>
+				        	        			<StyledTableCell align="right">IPv4</StyledTableCell>
+				        	        			<StyledTableCell align="right">IPv6</StyledTableCell>
 				        	        			<StyledTableCell align="right">Active</StyledTableCell>
 				        	        			<StyledTableCell align="right">Created At</StyledTableCell>
 				        	        			<StyledTableCell align="right">Actions</StyledTableCell>
@@ -437,21 +460,42 @@ class Switchs extends React.Component {
 				        	        	<TableBody>
 				        	        	{
 				        	    			this.state.arraySwitchs.map(function(obj, idx){
+				        	    				let date = new Date(obj.createdAt);
 				        	            		return (
 				        	            			<StyledTableRow key={idx}>
 						        	        			<StyledTableCell align="right">{obj.id}</StyledTableCell>
-						        	        			<StyledTableCell align="right">{obj.brand}</StyledTableCell>
 						        	        			<StyledTableCell align="right">{obj.name}</StyledTableCell>
+						        	        			<StyledTableCell align="right">{obj.switchModel.brand + '-' + obj.switchModel.name}</StyledTableCell>
+						        	        			<StyledTableCell align="right">{ (obj.vlan ? obj.vlan.tagId : "") }</StyledTableCell>
+						        	        			<StyledTableCell align="right">{ (obj.pop ? obj.pop.name : "") }</StyledTableCell>
+						        	        			<StyledTableCell align="right">{obj.addressIpv4}</StyledTableCell>
+						        	        			<StyledTableCell align="right">{obj.addressIpv6}</StyledTableCell>
 						        	        			<StyledTableCell align="right">{obj.active?"Yes":"No"}</StyledTableCell>
-						        	        			<StyledTableCell align="right">{obj.createdAt}</StyledTableCell>
-						        	        			<StyledTableCell align="right">
-						        	        			
-						        	        			</StyledTableCell>
+						        	        			<StyledTableCell align="right">{date.toLocaleDateString()}</StyledTableCell>
+						        	        			<StyledTableCell align="right">&nbsp;</StyledTableCell>
 						        	        		</StyledTableRow>
 						        	        	)
 				        	            	})
 				        	        	}
 				        	        	</TableBody>
+				        	            <TableFooter>
+				        	            	<TableRow>
+				        	            		<TablePagination
+				        	            			rowsPerPageOptions={[15,50,100]}
+				        	            			colSpan={10}
+				        	            			count={this.state.total}
+				        	            			rowsPerPage={this.state.rowsPerPage}
+				        	            			page={this.state.offset}
+				        	            			labelRowsPerPage={'Limit'}
+				        	            			SelectProps={{
+				        	            				inputProps: { 'aria-label': 'Limit' },
+				        	            				native: true,
+				        	            			}}
+				        	            			onChangePage={this.handleChangePage}
+				        	            			onChangeRowsPerPage={this.handleChangeRowsPerPage}
+				        	            		/>
+				        	            	</TableRow>
+				        	        	</TableFooter>
 				        	        </Table>
 			        			</Paper>
 			        		</Grid>
@@ -487,7 +531,7 @@ class Switchs extends React.Component {
 							    			variant="outlined"
 								        />
 							        </Grid>
-						    		<Grid item xs={12} md={6}>
+						    		<Grid item xs={12} md={4}>
 								        <TextField
 											id="pop"
 											name="pop"
@@ -501,17 +545,18 @@ class Switchs extends React.Component {
 												native: true,
 											}}
 										>
+        	            					<option key={"pop_0"} value={0}>{ '-- Selecione --' }</option>
 				        	        	{
 				        	    			this.state.arrayPop.map(function(obj, idx){
 				        	            		return (
 		
-				        	            				<option key={"pop_"+idx} value={obj.id}>{ obj.name }</option>
+				        	            				<option key={"pop_"+(idx+1)} value={obj.id}>{ obj.name }</option>
 						        	        	)
 				        	            	})
 				        	        	}
 							    		</TextField>
 							        </Grid>
-						    		<Grid item xs={12} md={6}>
+						    		<Grid item xs={12} md={4}>
 								        <TextField
 											id="switch_model"
 											name="switch_model"
@@ -528,7 +573,31 @@ class Switchs extends React.Component {
 				        	        	{
 				        	    			this.state.arraySwitchModel.map(function(obj, idx){
 				        	            		return (
-				        	            			<option key={"brand_"+idx} value={obj.id}>{ obj.brand + "-" +obj.name }</option>
+				        	            			<option key={"model_"+idx} value={obj.id}>{ obj.brand + "-" +obj.name }</option>
+						        	        	)
+				        	            	})
+				        	        	}
+							    		</TextField>
+							        </Grid>
+						    		<Grid item xs={12} md={4}>
+								        <TextField
+											id="vlan"
+											name="vlan"
+										    margin="dense"
+											select
+											fullWidth
+								            required
+											label="Admin Vlan"
+											variant="outlined"
+											SelectProps={{
+												native: true,
+											}}
+										>
+    	            						<option key={"vlan_0"} value={0}>{ '-- Selecione --' }</option>
+				        	        	{
+				        	    			this.state.arrayVlan.map(function(obj, idx){
+				        	            		return (
+				        	            			<option key={"vlan_"+idx} value={obj.id}>{ obj.tagId }</option>
 						        	        	)
 				        	            	})
 				        	        	}
@@ -561,7 +630,7 @@ class Switchs extends React.Component {
 						            		margin="dense"
 								            id="address_ipv4"
 								            name="address_ipv4"
-								            label="IPV4 Address"
+								            label="Admin IPV4 Address"
 								            type="text"
 								            fullWidth
 							    			variant="outlined"
@@ -572,7 +641,7 @@ class Switchs extends React.Component {
 							            	margin="dense"
 								            id="address_ipv6"
 								            name="address_ipv6"
-								            label="IPV6 Address"
+								            label="Admin IPV6 Address"
 								            type="text"
 								            fullWidth
 							    			variant="outlined"
