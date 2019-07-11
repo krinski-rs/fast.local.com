@@ -1,4 +1,9 @@
 import React from 'react';
+import {
+	Switch,
+	Route,
+	Redirect,
+} from "react-router-dom";
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -8,21 +13,9 @@ import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
 
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TableFooter from '@material-ui/core/TableFooter';
-import TablePagination from '@material-ui/core/TablePagination';
 
 import { withStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
@@ -31,18 +24,12 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import SettingsIcon from '@material-ui/icons/Settings';
-import HomeIcon from '@material-ui/icons/Home';
 import SaveIcon from '@material-ui/icons/Save';
 import ErrorIcon from '@material-ui/icons/Error';
 import CloseIcon from '@material-ui/icons/Close';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import WarningIcon from '@material-ui/icons/Warning';
 import InfoIcon from '@material-ui/icons/Info';
-import PaletteIcon from '@material-ui/icons/Palette';
-import SettingsInputAntennaIcon from '@material-ui/icons/SettingsInputAntenna';
-import RouterIcon from '@material-ui/icons/Router';
-import DeviceHubIcon from '@material-ui/icons/DeviceHub';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -55,13 +42,16 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 
-
-import { AdapterLink, styles } from '../../components/util/config';
 import { getCookie, renderRedirect } from '../../components/util/auth';
 import { requests } from '../../components/util/request';
+import { styles } from '../../components/util/config';
 
 import { amber, green } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
+
+import AppDrawerNavItem from '../message/AppDrawerNavItem';
+import ListService from './ListService';
+import AddService from './AddService';
 
 const variantIcon = {
 	success: CheckCircleIcon,
@@ -96,26 +86,6 @@ const useStyles1 = makeStyles(theme => ({
 	}
 }));
 
-const StyledTableCell = withStyles(theme => ({
-	head: {
-		backgroundColor: theme.palette.common.black,
-		color: theme.palette.common.white
-	},
-	body: {
-		fontSize: 14
-	},
-}))(TableCell);
-
-const StyledTableRow = withStyles(theme => ({
-	root: {
-		'&:nth-of-type(odd)': {
-			backgroundColor: theme.palette.background.default
-		}
-	}
-}))(TableRow);
-
-
-
 function MySnackbarContentWrapper(props) {
 	const classes = useStyles1();
 	const { className, message, onClose, variant, ...other } = props;
@@ -137,6 +107,18 @@ function MySnackbarContentWrapper(props) {
 				</IconButton>
 			]}
 			{...other}
+		/>
+	);
+}
+
+function PrivateRoute({ component: Component, ...rest }) {
+	return (
+		<Route {...rest}
+			render={ props =>
+				rest.user.logged ? 
+					( <Component {...rest} /> ) : 
+					( <Redirect to={{ pathname: "/login", state: { from: props.location } }} /> )
+			}
 		/>
 	);
 }
@@ -183,7 +165,7 @@ class Service extends React.Component {
 		if(!this.props.user || !this.props.user.logged || (this.props.user.cookie !== getCookie())){
 			renderRedirect();
 		}
-	    this.list();
+//	    this.list();
 	}
 	
 	list(offset = 0, limit = 15){
@@ -288,8 +270,8 @@ class Service extends React.Component {
 	}
 	
 	render() {
-		const fixedHeightPaper = clsx(this.props.classes.paper, this.props.classes.fixedHeight);
 		const date = new Date();
+		const state = this.props.appState;
 		return (
 			<div className={ this.props.classes.root }>
 				<CssBaseline />
@@ -330,114 +312,35 @@ class Service extends React.Component {
 			    	</div>
 			        <Divider />
 					<List>
-						<div>
-							<Link component={AdapterLink} color="inherit" to="/home">
-								<ListItem button>
-									<ListItemIcon>
-										<HomeIcon />
-									</ListItemIcon>
-									<ListItemText primary="Home" />
-								</ListItem>
-				        	</Link>
-							<Link component={AdapterLink} color="inherit" to="/pop">
-								<ListItem button>
-									<ListItemIcon>
-										<SettingsInputAntennaIcon />
-									</ListItemIcon>
-									<ListItemText primary="POP" />
-								</ListItem>
-				        	</Link>
-							<Link component={AdapterLink} color="inherit" to="/switchs">
-								<ListItem button>
-									<ListItemIcon>
-										<RouterIcon />
-									</ListItemIcon>
-									<ListItemText primary="Switchs" />
-								</ListItem>
-				        	</Link>
-							<Link component={AdapterLink} color="inherit" to="/vlan">
-								<ListItem button>
-									<ListItemIcon>
-										<DeviceHubIcon />
-									</ListItemIcon>
-									<ListItemText primary="Vlan" />
-								</ListItem>
-				        	</Link>
-							<Link component={AdapterLink} color="inherit" to="/service">
-						        <ListItem button>
-						        	<ListItemIcon>
-						        		<SettingsIcon />
-						        	</ListItemIcon>
-						        	<ListItemText primary="Serviço" />
-						        </ListItem>
-				        	</Link>
-							<Link component={AdapterLink} color="inherit" to="/switchmodel">
-						        <ListItem button>
-						        	<ListItemIcon>
-						        		<PaletteIcon />
-						        	</ListItemIcon>
-						        	<ListItemText primary="Modelo de Switch" />
-						        </ListItem>
-				        	</Link>
-					    </div>	        
+						<AppDrawerNavItem key={"app_drawer_nav_item_0"}
+							depth={ 0 }
+							title={"Home"}
+							href={"/home"}
+							path={'M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z'}
+						/>
+						<AppDrawerNavItem key={"app_drawer_nav_item_1"}
+							depth={ 0 }
+							title={"Listagem"}
+							href={"/service"}
+							path={'M7,5H21V7H7V5M7,13V11H21V13H7M4,4.5A1.5,1.5 0 0,1 5.5,6A1.5,1.5 0 0,1 4,7.5A1.5,1.5 0 0,1 2.5,6A1.5,1.5 0 0,1 4,4.5M4,10.5A1.5,1.5 0 0,1 5.5,12A1.5,1.5 0 0,1 4,13.5A1.5,1.5 0 0,1 2.5,12A1.5,1.5 0 0,1 4,10.5M7,19V17H21V19H7M4,16.5A1.5,1.5 0 0,1 5.5,18A1.5,1.5 0 0,1 4,19.5A1.5,1.5 0 0,1 2.5,18A1.5,1.5 0 0,1 4,16.5Z'}
+						/>
+						<AppDrawerNavItem key={"app_drawer_nav_item_2"}
+							depth={ 0 }
+							title={"Cadastro"}
+							href={"/service/cadastro"}
+							path={'M19,11H15V15H13V11H9V9H13V5H15V9H19M20,2H8A2,2 0 0,0 6,4V16A2,2 0 0,0 8,18H20A2,2 0 0,0 22,16V4A2,2 0 0,0 20,2M4,6H2V20A2,2 0 0,0 4,22H18V20H4V6Z'}
+						/>
 					</List>
 			    </Drawer>
 			    <main className={ this.props.classes.content }>
 		        	<div className={ this.props.classes.appBarSpacer } />
 			        <Container maxWidth="lg" className={ this.props.classes.container }>
-		        		<Grid container spacing={3}>
-			        		<Grid item xs={12} md={12} lg={12}>
-			        			<Paper className={fixedHeightPaper}>
-				        	        <Table className={this.props.classes.table} size="small">
-				        	        	<TableHead>
-				        	        		<TableRow>
-				        	        			<StyledTableCell align="right">ID</StyledTableCell>
-				        	        			<StyledTableCell align="right">Name</StyledTableCell>
-				        	        			<StyledTableCell align="right">Active</StyledTableCell>
-				        	        			<StyledTableCell align="right">Created At</StyledTableCell>
-				        	        			<StyledTableCell align="right">Actions</StyledTableCell>
-				        	        		</TableRow>
-				        	        	</TableHead>
-				        	        	<TableBody>
-				        	        	{
-				        	    			this.state.arrayService.map(function(obj, idx){
-				        	    				let date = new Date(obj.createdAt);
-				        	            		return (
-				        	            			<StyledTableRow key={idx}>
-						        	        			<StyledTableCell align="right">{obj.id}</StyledTableCell>
-						        	        			<StyledTableCell align="right">{obj.name}</StyledTableCell>
-						        	        			<StyledTableCell align="right">{obj.active?"Yes":"No"}</StyledTableCell>
-						        	        			<StyledTableCell align="right">{date.toLocaleDateString()}</StyledTableCell>
-						        	        			<StyledTableCell align="right">
-						        	        			
-						        	        			</StyledTableCell>
-						        	        		</StyledTableRow>
-						        	        	)
-				        	            	})
-				        	        	}
-				        	        	</TableBody>
-				        	            <TableFooter>
-				        	            	<TableRow>
-				        	            		<TablePagination
-				        	            			rowsPerPageOptions={[15,50,100]}
-				        	            			colSpan={5}
-				        	            			count={this.state.total}
-				        	            			rowsPerPage={this.state.rowsPerPage}
-				        	            			page={this.state.offset}
-				        	            			labelRowsPerPage={'Limit'}
-				        	            			SelectProps={{
-				        	            				inputProps: { 'aria-label': 'Limit' },
-				        	            				native: true,
-				        	            			}}
-				        	            			onChangePage={this.handleChangePage}
-				        	            			onChangeRowsPerPage={this.handleChangeRowsPerPage}
-				        	            		/>
-				        	            	</TableRow>
-				        	        	</TableFooter>
-				        	        </Table>
-			        			</Paper>
-			        		</Grid>
-			        	</Grid>
+						<Route>
+							<Switch>
+								<PrivateRoute path="/service/cadastro" component={AddService} update={this.props.setAppState} {...state} />
+								<PrivateRoute path="/" component={ListService} update={this.props.setAppState} {...state} />
+							</Switch>
+						</Route>
 				    </Container>
 					<Typography variant="body2" color="textSecondary" align="center">
 						{'Copyright © '+date.getFullYear()+' All rights reserved  '}

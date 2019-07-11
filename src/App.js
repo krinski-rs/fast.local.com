@@ -34,13 +34,14 @@ class App extends Component {
 					<Route exact={true} path='/' render={()=><Login {...state} update={this.props.setAppState} appState={this.props.appState} />} />
 					<Route exact={true} path='/login' render={()=><Login {...state} update={this.props.setAppState} appState={this.props.appState} />} />
 					<PrivateRoute path="/home" component={Home} update={this.props.setAppState} {...state} />
-					<PrivateRoute path="/service" component={Service} update={this.props.setAppState} {...state} />
+					<PrivateRoute path="/service" component={Service} update={this.props.setAppState} appState={this.props.appState} {...state} />
 					<PrivateRoute path="/switchmodel" component={SwitchModel} update={this.props.setAppState} {...state} />
 					<PrivateRoute path="/pop" component={Pop} update={this.props.setAppState} {...state} />
 					<PrivateRoute path="/switchs" component={Switchs} update={this.props.setAppState} {...state} />
 					<PrivateRoute path="/vlan" component={Vlan} update={this.props.setAppState} {...state} />
 				</Switch>
 			</Router>
+			
 		);
 	}
 }

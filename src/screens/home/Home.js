@@ -11,7 +11,6 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
-import { Link as RouterLink } from 'react-router-dom';
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -32,13 +31,8 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import SettingsIcon from '@material-ui/icons/Settings';
-import HomeIcon from '@material-ui/icons/Home';
 import AssignmentIcon from '@material-ui/icons/Assignment';
-import PaletteIcon from '@material-ui/icons/Palette';
-import SettingsInputAntennaIcon from '@material-ui/icons/SettingsInputAntenna';
-import RouterIcon from '@material-ui/icons/Router';
-import DeviceHubIcon from '@material-ui/icons/DeviceHub';
+import AppDrawerNavItem from '../message/AppDrawerNavItem';
 
 const drawerWidth = 240;
 const theme = createMuiTheme({
@@ -131,8 +125,6 @@ const styles = {
 	}
 };
 
-const AdapterLink = React.forwardRef((props, ref) => <RouterLink innerRef={ref} {...props} />);
-
 class Home extends React.Component {
 	constructor(props) {
 		super(props);		
@@ -192,56 +184,42 @@ class Home extends React.Component {
 			    	</div>
 			        <Divider />
 					<List>
-						<div>
-							<Link component={AdapterLink} color="inherit" to="/home">
-								<ListItem button>
-									<ListItemIcon>
-										<HomeIcon />
-									</ListItemIcon>
-									<ListItemText primary="Home" />
-								</ListItem>
-				        	</Link>
-							<Link component={AdapterLink} color="inherit" to="/pop">
-								<ListItem button>
-									<ListItemIcon>
-										<SettingsInputAntennaIcon />
-									</ListItemIcon>
-									<ListItemText primary="POP" />
-								</ListItem>
-				        	</Link>
-							<Link component={AdapterLink} color="inherit" to="/switchs">
-								<ListItem button>
-									<ListItemIcon>
-										<RouterIcon />
-									</ListItemIcon>
-									<ListItemText primary="Switchs" />
-								</ListItem>
-				        	</Link>
-							<Link component={AdapterLink} color="inherit" to="/vlan">
-								<ListItem button>
-									<ListItemIcon>
-										<DeviceHubIcon />
-									</ListItemIcon>
-									<ListItemText primary="Vlan" />
-								</ListItem>
-				        	</Link>
-							<Link component={AdapterLink} color="inherit" to="/service">
-						        <ListItem button>
-						        	<ListItemIcon>
-						        		<SettingsIcon />
-						        	</ListItemIcon>
-						        	<ListItemText primary="Serviço" />
-						        </ListItem>
-				        	</Link>
-							<Link component={AdapterLink} color="inherit" to="/switchmodel">
-						        <ListItem button>
-						        	<ListItemIcon>
-						        		<PaletteIcon />
-						        	</ListItemIcon>
-						        	<ListItemText primary="Modelo de Switch" />
-						        </ListItem>
-				        	</Link>
-					    </div>	        
+						<AppDrawerNavItem key={"app_drawer_nav_item_0"}
+							depth={ 0 }
+							title={"Home"}
+							href={"/home"}
+							path={'M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z'}
+						/>
+						<AppDrawerNavItem key={"app_drawer_nav_item_1"}
+							depth={ 0 }
+							title={"POP"}
+							href={"/pop"}
+							path={'M12 5c-3.87 0-7 3.13-7 7h2c0-2.76 2.24-5 5-5s5 2.24 5 5h2c0-3.87-3.13-7-7-7zm1 9.29c.88-.39 1.5-1.26 1.5-2.29 0-1.38-1.12-2.5-2.5-2.5S9.5 10.62 9.5 12c0 1.02.62 1.9 1.5 2.29v3.3L7.59 21 9 22.41l3-3 3 3L16.41 21 13 17.59v-3.3zM12 1C5.93 1 1 5.93 1 12h2c0-4.97 4.03-9 9-9s9 4.03 9 9h2c0-6.07-4.93-11-11-11z'}
+						/>
+						<AppDrawerNavItem key={"app_drawer_nav_item_2"}
+							depth={ 0 }
+							title={"Switchs"}
+							href={"/switchs"}
+							path={'M20.2 5.9l.8-.8C19.6 3.7 17.8 3 16 3s-3.6.7-5 2.1l.8.8C13 4.8 14.5 4.2 16 4.2s3 .6 4.2 1.7zm-.9.8c-.9-.9-2.1-1.4-3.3-1.4s-2.4.5-3.3 1.4l.8.8c.7-.7 1.6-1 2.5-1 .9 0 1.8.3 2.5 1l.8-.8zM19 13h-2V9h-2v4H5c-1.1 0-2 .9-2 2v4c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-4c0-1.1-.9-2-2-2zM8 18H6v-2h2v2zm3.5 0h-2v-2h2v2zm3.5 0h-2v-2h2v2z'}
+						/>
+						<AppDrawerNavItem key={"app_drawer_nav_item_3"}
+							depth={ 0 }
+							title={"Vlan"}
+							href={"/vlan"}
+							path={'M17 16l-4-4V8.82C14.16 8.4 15 7.3 15 6c0-1.66-1.34-3-3-3S9 4.34 9 6c0 1.3.84 2.4 2 2.82V12l-4 4H3v5h5v-3.05l4-4.2 4 4.2V21h5v-5h-4z'}
+						/>
+						<AppDrawerNavItem key={"app_drawer_nav_item_4"}
+							depth={ 0 }
+							title={"Serviço"}
+							href={"/service"}
+							path={'M15.95 10.78c.03-.25.05-.51.05-.78s-.02-.53-.06-.78l1.69-1.32c.15-.12.19-.34.1-.51l-1.6-2.77c-.1-.18-.31-.24-.49-.18l-1.99.8c-.42-.32-.86-.58-1.35-.78L12 2.34c-.03-.2-.2-.34-.4-.34H8.4c-.2 0-.36.14-.39.34l-.3 2.12c-.49.2-.94.47-1.35.78l-1.99-.8c-.18-.07-.39 0-.49.18l-1.6 2.77c-.1.18-.06.39.1.51l1.69 1.32c-.04.25-.07.52-.07.78s.02.53.06.78L2.37 12.1c-.15.12-.19.34-.1.51l1.6 2.77c.1.18.31.24.49.18l1.99-.8c.42.32.86.58 1.35.78l.3 2.12c.04.2.2.34.4.34h3.2c.2 0 .37-.14.39-.34l.3-2.12c.49-.2.94-.47 1.35-.78l1.99.8c.18.07.39 0 .49-.18l1.6-2.77c.1-.18.06-.39-.1-.51l-1.67-1.32zM10 13c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z'}
+						/>
+						<AppDrawerNavItem key={"app_drawer_nav_item_5"}
+							depth={ 0 }
+							title={"Modelo de Switch"}
+							href={"/switchmodel"}
+							path={'M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z'}
+						/>
 					</List>
 			        <Divider />
 					<List>
