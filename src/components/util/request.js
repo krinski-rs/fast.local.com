@@ -1,4 +1,3 @@
-
 const requests = (data, method, headers, endPoint, callback) => {
 	if(data){
 	    return fetch(endPoint, {

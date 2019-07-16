@@ -4,15 +4,17 @@ class AppState extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			error: false,
 			menuClick: true,
-			msg: "",
+			auth: {
+				error: false,
+				msg: "",
+			},
 			user: {
 				logged: false,
 				cookie: null,
 				name: null,
-				userName: null
-			}
+				userName: null,
+			},
 		};
 		
 		this.setAppState = this.setAppState.bind(this);
@@ -48,4 +50,3 @@ class AppState extends Component {
 }
 
 export default AppState;
-

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom'
+import clsx from 'clsx';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Avatar from '@material-ui/core/Avatar';
@@ -12,59 +13,62 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
 import Box from '@material-ui/core/Box';
+import Snackbar from '@material-ui/core/Snackbar';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
+import IconButton from '@material-ui/core/IconButton';
+import { withStyles } from '@material-ui/core/styles';
 
-import CustomizedDialogs from '../message/CustomizedDialogs';
-
-import { login, me, getCookie } from '../../components/util/auth';
-
-
-
-function MadeWithLove() {
-	return (
-		<Typography variant="body2" color="textSecondary" align="center">
-			{'Built with love by the '}
-			<Link color="inherit" href="#">
-				Material-UI
-			</Link>
-			{' team.'}
-		</Typography>
-	);
-}
+import { login,getCookie } from '../../components/util/auth';
+import { useStyleLogin1, useStyleLogin2, variantIcon } from '../../config/css/login';
+import history from '../../components/util/history';
 
 class Login extends React.Component {
 	constructor(props){
 		super(props);
+		this.state = {
+			open: false,
+			mensagem: "",
+		}
 	    this.handleSubmit = this.handleSubmit.bind(this);
-		this.props.update({dialog:{open:false}});
+	    this.closeNotifier = this.closeNotifier.bind(this);
 	}
 	
-	componentDidMount() {
-		if(this.props.user && this.props.user.logged && (this.props.user.cookie === getCookie())){
-			this.renderRedirect();
-		}else if(getCookie()){
-			me(this.props.update);
-		}
-
+	closeNotifier(){
+		this.setState(prevState => ({
+			open: false,
+			mensagem: '',
+		}));
 	}
 	
-	renderRedirect = () => {
-		if (this.props.user.logged) {
-			return <Redirect to='/home' />
-		}
-	}
-
 	handleSubmit(event) {
-		login(event, this.props.update);
-		this.renderRedirect();
+		var retorno = login(event, this.props.update);
+		retorno.then(obj => {
+			if(obj.auth.error || !obj.user.logged){
+				this.setState(prevState => ({
+					open: obj.auth.error,
+					mensagem: obj.auth.msg,
+				}));
+			}
+			return obj;
+		}).then(obj => {
+			if(!obj.auth.error && obj.user.logged){
+				this.setState(prevState => ({
+					open: false,
+					mensagem: '',
+				}));
+				history.push('/');
+			}
+		});
 	}
 	
 	render() {
-		const state = this.props;
+//		if(this.props.appState.user && this.props.appState.user.logged && (this.props.appState.user.cookie === getCookie())){
+//			return <Redirect to='/' />
+//		}
+		const ErrorIcon = variantIcon['error'];
+		const CloseIcon = variantIcon['close'];
 		return (
 			<Container component="main" maxWidth="xs">
-			{
-				state.error ? <CustomizedDialogs text={state.msg} title={"Erro"} update={ this.props.update }  appState={this.props.appState}/> : this.renderRedirect()
-			}
 				<CssBaseline />
 				<div style={{ marginTop: 64, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
 					<Avatar style={{margin: 8, backgroundColor: 'red'}}>
@@ -97,7 +101,7 @@ class Login extends React.Component {
 							label="Password"
 							type="password"
 							id="password"
-							autoComplete="current-password"
+							autoComplete="password"
 						/>
 						<FormControlLabel
 							control={<Checkbox value="remember" color="primary" />}
@@ -127,11 +131,42 @@ class Login extends React.Component {
 			        </form>
 				</div>
 				<Box mt={5}>
-					<MadeWithLove />
+					<Typography variant="body2" color="textSecondary" align="center">
+						{'Built with love by the '}
+						<Link color="inherit" href="#">
+							Material-UI
+						</Link>
+						{' team.'}
+					</Typography>
 				</Box>
+				<Snackbar
+					anchorOrigin={{
+						vertical: 'bottom',
+						horizontal: 'left',
+					}}
+					open={this.state.open}
+					autoHideDuration={6000}
+					onClose={this.closeNotifier}
+				>
+					<SnackbarContent
+						className={clsx(this.props.classes["error"], this.props.classes.margin)}
+						aria-describedby="client-snackbar"
+						message={
+							<span id="client-snackbar" className={this.props.classes.message}>
+								<ErrorIcon className={clsx(this.props.classes.icon, this.props.classes.iconVariant)} />
+								{this.state.mensagem}
+							</span>
+						}
+						action={[
+							<IconButton key="close" aria-label="Close" color="inherit" onClick={this.closeNotifier}>
+								<CloseIcon className={this.props.classes.icon} />
+							</IconButton>,
+						]}
+					/>
+				</Snackbar>
 			</Container>
     	);
 	}
 }
 
-export default Login;
+export default withStyles(useStyleLogin1, useStyleLogin2)(Login);

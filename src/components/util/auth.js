@@ -1,28 +1,34 @@
+import React from 'react';
+import {
+	Route,
+	Redirect
+} from "react-router-dom";
 import cookie from 'react-cookies';
 
 const getCookie = () => {
 	return cookie.load('sso');
 };
 
-const login = (event, update) => {
+function PrivateRoute({ component: Component, ...rest }) {
+	console.log(rest);
+	return (
+		<Route {...rest}
+			render={ props =>
+				(rest.appState.user.logged && !rest.appState.auth.error && rest.appState.user.cookie === getCookie()) ? 
+					( <Component {...rest} /> ) : 
+					( <Redirect to={{ pathname: "/login", state: { from: props.location } }} /> )
+			}
+		/>
+	);
+}
+
+async function login (event, update) {
 	event.preventDefault();
-	if (!event.target.checkValidity()) {
-		update({
-			error:true,
-			msg: "Preencha todos os campos."
-		});
-		/*
-		 * formulário é inválido! então não fazemos nada
-		 */
-		return;
-	}
-	
+	let state = null;	
     var current, entries, item, key, output, value;
     output = {};
     entries = new FormData( event.target ).entries();
-    /*
-     * Iterar sobre valores e atribuir ao item.
-     */
+    /* Iterar sobre valores e atribuir ao item. */
     item = entries.next().value;
     while( item ) {
     	/*
@@ -30,20 +36,14 @@ const login = (event, update) => {
     	 */
     	key = item[0];
     	value = item[1];
-    	/*
-    	 * Verifique se a chave já existe
-    	 */
+    	/* Verifique se a chave já existe */
     	if(Object.prototype.hasOwnProperty.call( output, key)){
     		current = output[ key ];
     		if( !Array.isArray( current ) ){
-    			/*
-    			 * Se não for um array, converta-o para um array.
-    			 */
+    			/* Se não for um array, converta-o para um array. */
     			current = output[ key ] = [ current ];
     		}
-    		/*
-    		 * Adicona o novo valor ao array.
-    		 */
+    		/* Adicona o novo valor ao array. */
     		current.push( value );
     	}else{
     		output[ key ] = value;
@@ -51,7 +51,7 @@ const login = (event, update) => {
     	
     	item = entries.next().value;
     }
-    fetch('http://sso.local.com/auth/login', {
+    return await fetch('http://sso.local.com/auth/login', {
     	method: 'POST',
     	credentials: 'include',
     	body: JSON.stringify(output),
@@ -63,8 +63,16 @@ const login = (event, update) => {
     	if(!response.ok){
     		var retorno = response.json();
     		update({
-    			error:true,
-    			msg: "Usuário ou senha inválidos!"
+        		auth: {
+    				error: true,
+    				msg: "Usuário ou senha inválidos!",
+        		},
+    			user: {
+    				logged: false,
+    				cookie: null,
+    				name: null,
+    				userName: null,
+    			}
     		});
 			return retorno;
     	}
@@ -72,43 +80,68 @@ const login = (event, update) => {
     }).then((data) => {
     	if(data.id > 0){
 	    	cookie.save('sso', data.AccessToken, { path: '/', domain: '.local.com', httpOnly: false });
-	    	update({
-    			error:false,
-    			msg: "",
+	    	state = {
+	    		auth: {
+					error: false,
+					msg: "",
+	    		},
     			user: {
     				logged: true,
     				cookie: data.AccessToken,
     				name: data.nome,
     				userName: data.username
-    			},
-    			dialog:{open:false}
-    		});
+    			}
+    		};
+	    	update(state);
     	}else{
-        	update({
-    			user: {},
-    			error:true,
-    			msg: "Usuário ou senha inválidos!",
-    			dialog:{open:true}
-    		});
+    		state = {
+	    		auth: {
+					error: true,
+					msg: "Usuário ou senha inválidos!",
+	    		},
+    			user: {
+    				logged: false,
+    				cookie: null,
+    				name: null,
+    				userName: null,
+    			}
+    		};
+        	update(state);
     	}
+    	return state;
     }).catch((error) => {
-    	update({
-			user: {},
-			error:true,
-			msg: "Usuário ou senha inválidos!",
-			dialog:{open:true}
-		});
+		state = {
+    		auth: {
+				error: true,
+				msg: "Usuário ou senha inválidos!",
+    		},
+			user: {
+				logged: false,
+				cookie: null,
+				name: null,
+				userName: null,
+			}
+		};
+    	update(state);
+    	return state;
     });
 };
 
 const me = (update) => {
     if(!getCookie()){
     	update({
-			user: {},
-			error:true,
-			msg: "Usuário não logado!",
-			dialog:{open:true}
+    		auth: {
+				error: true,
+				msg: "Usuário não logado!",
+    		},
+			user: {
+				logged: false,
+				cookie: null,
+				name: null,
+				userName: null,
+			}
 		});
+    	return ;
     }
 
     fetch('http://sso.local.com/auth/me', {
@@ -123,6 +156,10 @@ const me = (update) => {
     }).then((data) => {
     	if(data.id > 0){
 	    	update({
+	    		auth: {
+					error: false,
+					msg: "",
+	    		},
     			user: {
     				logged: true,
     				cookie: data.AccessToken,
@@ -139,10 +176,18 @@ const me = (update) => {
 const logout = (update) => {
     if(!getCookie()){
     	update({
-			user: {},
-			error:true,
-			msg: "Usuário não logado!"			
+    		auth: {
+				error: true,
+				msg: "Usuário não logado!",
+    		},
+			user: {
+				logged: false,
+				cookie: null,
+				name: null,
+				userName: null,
+			}
 		});
+    	return ;
     }
 
     fetch('http://sso.local.com/auth/logout', {
@@ -157,13 +202,15 @@ const logout = (update) => {
     }).then((data) => {
     	if(data.logout){
 	    	update({
-				error:true,
-				msg: "Usuário não logado!",
+	    		auth: {
+					error: true,
+					msg: "Usuário não logado!",
+	    		},
 				user: {
 					logged: false,
 					cookie: null,
 					name: null,
-					userName: null
+					userName: null,
 				}
 			});
 	    	cookie.remove('sso', { path: '/', domain: '.local.com', httpOnly: false });	    	
@@ -173,4 +220,4 @@ const logout = (update) => {
     });
 };
 
-export { getCookie, login, me, logout };
+export { getCookie, login, me, logout, PrivateRoute };
