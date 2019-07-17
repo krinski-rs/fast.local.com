@@ -17,7 +17,7 @@ import { styles } from '../../css/base.js';
 import AppDrawerNavItem from '../../components/util/AppDrawerNavItem';
 import Footer from '../../components/util/Footer';
 
-class Home extends Component {
+class Vlan extends Component {
 	constructor(props) {
 		super(props);		
 		this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
@@ -53,7 +53,7 @@ class Home extends Component {
 							</SvgIcon>
 			      		</IconButton>
 						<Typography component="h1" variant="h6" color="inherit" noWrap className={ this.props.classes.title }>
-				      		{ "Home" }
+				      		{ "Vlan" }
 			      		</Typography>
 			      		<IconButton color="inherit">
 				      		<Badge badgeContent={0} color="secondary">
@@ -90,7 +90,7 @@ class Home extends Component {
 						<AppDrawerNavItem key={"app_drawer_nav_item_0"}
 							depth={ 0 }
 							title={"Home"}
-							href={"/home"}
+							href={"/"}
 							path={'M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z'}
 						/>
 						<AppDrawerNavItem key={"app_drawer_nav_item_1"}
@@ -136,4 +136,4 @@ class Home extends Component {
 	}
 }
 
-export default withStyles(styles)(Home);
+export default withStyles(styles)(Vlan);

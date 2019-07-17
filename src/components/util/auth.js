@@ -10,7 +10,6 @@ const getCookie = () => {
 };
 
 function PrivateRoute({ component: Component, ...rest }) {
-	console.log(rest);
 	return (
 		<Route {...rest}
 			render={ props =>
@@ -24,8 +23,32 @@ function PrivateRoute({ component: Component, ...rest }) {
 
 async function login (event, update) {
 	event.preventDefault();
-	let state = null;	
-    var current, entries, item, key, output, value;
+	var state = null;	
+	/* formulário é inválido! então não fazemos nada */
+	if (!event.target.checkValidity()) {
+		state = {
+    		auth: {
+				error: true,
+				msg: "Preencha todos os campos",
+    		},
+			user: {
+				logged: false,
+				cookie: null,
+				name: null,
+				userName: null,
+			}
+		};
+		update(state);
+    	return new Promise(function(resolve, reject){
+    		reject(state)
+    	}).then(function(state){
+    		return state;
+    	}).catch(function(state){
+	    	return state;
+    	});
+	}
+
+	var current, entries, item, key, output, value;
     output = {};
     entries = new FormData( event.target ).entries();
     /* Iterar sobre valores e atribuir ao item. */
@@ -51,6 +74,7 @@ async function login (event, update) {
     	
     	item = entries.next().value;
     }
+    
     return await fetch('http://sso.local.com/auth/login', {
     	method: 'POST',
     	credentials: 'include',
@@ -127,9 +151,10 @@ async function login (event, update) {
     });
 };
 
-const me = (update) => {
+async function me(update){
+	var state = null;	
     if(!getCookie()){
-    	update({
+    	state = {
     		auth: {
 				error: true,
 				msg: "Usuário não logado!",
@@ -140,11 +165,18 @@ const me = (update) => {
 				name: null,
 				userName: null,
 			}
-		});
-    	return ;
+		};
+    	update(state);
+    	return new Promise(function(resolve, reject){
+    		reject(state)
+    	}).then(function(state){
+    		return state;
+    	}).catch(function(state){
+	    	return state;
+    	});
     }
 
-    fetch('http://sso.local.com/auth/me', {
+    return await fetch('http://sso.local.com/auth/me', {
     	method: 'GET',
     	credentials: 'include'
     }).then((response) => {
@@ -155,7 +187,7 @@ const me = (update) => {
 		return response.json();
     }).then((data) => {
     	if(data.id > 0){
-	    	update({
+    		state = {
 	    		auth: {
 					error: false,
 					msg: "",
@@ -166,8 +198,10 @@ const me = (update) => {
     				name: data.nome,
     				userName: data.username
     			}
-    		});
+    		};
+	    	update(state);
     	}
+    	return state;
     }).catch((error) => {
     	console.log('error: ' + error);
     });

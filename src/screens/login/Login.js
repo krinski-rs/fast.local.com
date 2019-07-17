@@ -1,5 +1,4 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom'
 import clsx from 'clsx';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -18,7 +17,7 @@ import SnackbarContent from '@material-ui/core/SnackbarContent';
 import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from '@material-ui/core/styles';
 
-import { login,getCookie } from '../../components/util/auth';
+import { login, me } from '../../components/util/auth';
 import { useStyleLogin1, useStyleLogin2, variantIcon } from '../../config/css/login';
 import history from '../../components/util/history';
 
@@ -31,6 +30,27 @@ class Login extends React.Component {
 		}
 	    this.handleSubmit = this.handleSubmit.bind(this);
 	    this.closeNotifier = this.closeNotifier.bind(this);
+	}
+	
+	componentDidMount(){
+		var retorno = me(this.props.update);
+		retorno.then(obj => {
+			if(!obj.auth || !obj.user || obj.auth.error || !obj.user.logged){
+				this.setState(prevState => ({
+					open: obj.auth.error,
+					mensagem: obj.auth.msg,
+				}));
+			}
+			return obj;
+		}).then(obj => {
+			if(!obj.auth.error && obj.user.logged){
+				this.setState(prevState => ({
+					open: false,
+					mensagem: '',
+				}));
+				history.push('/');
+			}
+		});
 	}
 	
 	closeNotifier(){
@@ -62,9 +82,6 @@ class Login extends React.Component {
 	}
 	
 	render() {
-//		if(this.props.appState.user && this.props.appState.user.logged && (this.props.appState.user.cookie === getCookie())){
-//			return <Redirect to='/' />
-//		}
 		const ErrorIcon = variantIcon['error'];
 		const CloseIcon = variantIcon['close'];
 		return (
@@ -141,8 +158,8 @@ class Login extends React.Component {
 				</Box>
 				<Snackbar
 					anchorOrigin={{
-						vertical: 'bottom',
-						horizontal: 'left',
+						vertical: 'top',
+						horizontal: 'center',
 					}}
 					open={this.state.open}
 					autoHideDuration={6000}
