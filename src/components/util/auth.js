@@ -13,7 +13,7 @@ function PrivateRoute({ component: Component, ...rest }) {
 	return (
 		<Route {...rest}
 			render={ props =>
-				(rest.appState.user.logged && !rest.appState.auth.error && rest.appState.user.cookie === getCookie()) ? 
+				(rest.appState && rest.appState.user.logged && !rest.appState.auth.error && rest.appState.user.cookie === getCookie()) ? 
 					( <Component {...rest} /> ) : 
 					( <Redirect to={{ pathname: "/login", state: { from: props.location } }} /> )
 			}
@@ -21,7 +21,7 @@ function PrivateRoute({ component: Component, ...rest }) {
 	);
 }
 
-async function login (event, update) {
+async function login (event, update, signal = null) {
 	event.preventDefault();
 	var state = null;	
 	/* formulário é inválido! então não fazemos nada */
@@ -82,7 +82,8 @@ async function login (event, update) {
     	headers: {
     		"Content-Type": "application/json",
     		"ApiKey": "3ada8f87cef4d41dbb385e41d0d55305b649161b"
-    	}
+    	},
+    	signal: signal
     }).then((response) => {
     	if(!response.ok){
     		var retorno = response.json();

@@ -128,6 +128,7 @@ class Home extends Component {
 			    <main className={ this.props.classes.content }>
 	        		<div className={ this.props.classes.appBarSpacer } />
 			        <Container maxWidth="lg" className={ this.props.classes.container }>
+			        <div>asd</div>
 			        </Container>
 					<Footer />
 			    </main>

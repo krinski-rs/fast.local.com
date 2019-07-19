@@ -1,4 +1,7 @@
 import React from 'react';
+import {
+	Redirect
+} from "react-router-dom";
 import clsx from 'clsx';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -6,10 +9,7 @@ import Avatar from '@material-ui/core/Avatar';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
 import Box from '@material-ui/core/Box';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -22,6 +22,7 @@ import { useStyleLogin1, useStyleLogin2, variantIcon } from '../../config/css/lo
 import history from '../../components/util/history';
 
 class Login extends React.Component {
+	abortController = new window.AbortController();
 	constructor(props){
 		super(props);
 		this.state = {
@@ -32,24 +33,43 @@ class Login extends React.Component {
 	    this.closeNotifier = this.closeNotifier.bind(this);
 	}
 	
+	componentWillUnmount(){
+		this.abortController.abort();
+		window.removeEventListener('onClick', this.closeNotifier, false);
+		window.removeEventListener('onSubmit', this.handleSubmit, false);
+	}
+	
+	componentDidUpdate() { 
+		if(this.props.appState.auth && this.props.appState.user && !this.props.appState.auth.error && this.props.appState.user.logged){
+			this.abortController.abort();
+			return <Redirect to='/home' />
+		}
+	}
+	
 	componentDidMount(){
 		var retorno = me(this.props.update);
 		retorno.then(obj => {
-			if(!obj.auth || !obj.user || obj.auth.error || !obj.user.logged){
+			if(obj === null){
+				this.setState(prevState => ({
+					open: true,
+					mensagem: 'Usuário não logado',
+				}));
+
+			}
+			if((obj !== null) && ((obj.auth && obj.user) && (obj.auth.error || !obj.user.logged))){
 				this.setState(prevState => ({
 					open: obj.auth.error,
 					mensagem: obj.auth.msg,
 				}));
 			}
-			return obj;
-		}).then(obj => {
-			if(!obj.auth.error && obj.user.logged){
+			if((obj !== null) && !obj.auth.error && obj.user.logged){
 				this.setState(prevState => ({
 					open: false,
 					mensagem: '',
 				}));
-				history.push('/');
+				history.push('/home');
 			}
+			return obj;
 		});
 	}
 	
@@ -61,29 +81,36 @@ class Login extends React.Component {
 	}
 	
 	handleSubmit(event) {
-		var retorno = login(event, this.props.update);
+		var retorno = login(event, this.props.update, this.abortController.signal);
 		retorno.then(obj => {
-			if(obj.auth.error || !obj.user.logged){
+			if(obj === null){
+				this.setState(prevState => ({
+					open: true,
+					mensagem: 'Usuário não logado',
+				}));
+
+			}
+			if((obj !== null) && ((obj.auth && obj.user) && (obj.auth.error || !obj.user.logged))){
 				this.setState(prevState => ({
 					open: obj.auth.error,
 					mensagem: obj.auth.msg,
 				}));
 			}
-			return obj;
-		}).then(obj => {
-			if(!obj.auth.error && obj.user.logged){
+			if((obj !== null) && !obj.auth.error && obj.user.logged){
 				this.setState(prevState => ({
 					open: false,
 					mensagem: '',
 				}));
-				history.push('/');
+				history.push('/home');
 			}
+			return obj;
 		});
 	}
 	
 	render() {
 		const ErrorIcon = variantIcon['error'];
 		const CloseIcon = variantIcon['close'];
+
 		return (
 			<Container component="main" maxWidth="xs">
 				<CssBaseline />
@@ -120,10 +147,6 @@ class Login extends React.Component {
 							id="password"
 							autoComplete="password"
 						/>
-						<FormControlLabel
-							control={<Checkbox value="remember" color="primary" />}
-							label="Remember me"
-						/>
 						<Button
 							type="submit"
 							fullWidth
@@ -133,18 +156,6 @@ class Login extends React.Component {
 						>
 							Sign In
 						</Button>
-						<Grid container>
-							<Grid item xs>
-								<Link href="#" variant="body2">
-									Forgot password?
-								</Link>
-							</Grid>
-							<Grid item>
-								<Link href="#" variant="body2">
-									{"Don't have an account? Sign Up"}
-								</Link>
-							</Grid>
-						</Grid>
 			        </form>
 				</div>
 				<Box mt={5}>

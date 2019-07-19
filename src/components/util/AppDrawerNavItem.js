@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles, createMuiTheme } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import ListItem from '@material-ui/core/ListItem';
-//import Button from '@material-ui/core/Button';
 import Collapse from '@material-ui/core/Collapse';
-//import { red } from '@material-ui/core/colors';
 import Link from '@material-ui/core/Link';
 import { Link as RouterLink } from 'react-router-dom';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -88,7 +86,7 @@ class AppDrawerNavItem  extends React.Component
 					<ListItem button style={style}>
 					{
 						this.props.path ? (
-								<ListItemIcon>
+							<ListItemIcon>
 								<SvgIcon titleAccess={this.props.title}>
 									<path d={this.props.path}/>
 								</SvgIcon>
