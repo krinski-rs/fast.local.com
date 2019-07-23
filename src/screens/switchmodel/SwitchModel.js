@@ -117,25 +117,6 @@ class SwitchModel extends Component {
 	        		<div className={ this.props.classes.appBarSpacer } />
 			        <Container maxWidth="lg" className={ this.props.classes.container }>
 							<Switch>
-								{/*<Route
-									exact={true}
-									path='/switchmodel/create'
-									render={
-										props => (
-											<SwitchModelCreate appState={ this.props.appState } update={ this.props.setAppState } />
-										)
-									}
-								/>
-								<Route
-									exact={true}
-									path='/switchmodel'
-									render={
-										props => (
-											<SwitchModelList appState={ this.props.appState } update={ this.props.setAppState } />
-										)
-									}
-								/>*/}
-
 								<PrivateRoute path="/switchmodel/create" component={SwitchModelCreate} appState={ this.props.appState } update={ this.props.setAppState } />
 								<PrivateRoute path="/switchmodel" component={SwitchModelList} appState={ this.props.appState } update={ this.props.setAppState } />
 							</Switch>

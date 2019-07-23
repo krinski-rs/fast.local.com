@@ -1,4 +1,5 @@
 import { createMuiTheme } from '@material-ui/core/styles';
+import { amber, green } from '@material-ui/core/colors';
 
 const drawerWidth = 240;
 
@@ -80,6 +81,7 @@ export const styles = {
 		minHeight: 577
 	},
 	paper: {
+	    padding: theme.spacing(2),
 		display: 'flex',
 		overflow: 'auto',
 		flexDirection: 'column',
@@ -101,5 +103,29 @@ export const styles = {
 	},
 	iconSmall: {
 		fontSize: 20
-	}
+	},
+	success: {
+		backgroundColor: green[600],
+	},
+	error: {
+		backgroundColor: theme.palette.error.dark,
+	},
+	info: {
+		backgroundColor: theme.palette.primary.main,
+	},
+	warning: {
+		backgroundColor: amber[700],
+	},
+	iconVariant: {
+		opacity: 0.9,
+		marginRight: theme.spacing(1),
+	},
+	margin: {
+		margin: theme.spacing(1),
+	},
+	message: {
+		display: 'flex',
+		alignItems: 'center',
+	},
+
 };
