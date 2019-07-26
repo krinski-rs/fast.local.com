@@ -14,13 +14,12 @@ import { StyledTableCell, StyledTableRow } from '../../components/util/table';
 import { styles } from '../../css/base.js';
 import { requests } from '../../components/util/request';
 
-class SwitchModelList extends Component {
+class PopList extends Component {
 	constructor(props) {
 		super(props);		
 		this.state = {
 			openDialog: false,
-			arraySwitchModel: [],
-			arrayBrand: [],
+			arrayPop: [],
 			error: false,
 			message: null,
 			variant: 'error',
@@ -28,7 +27,7 @@ class SwitchModelList extends Component {
 			total: 0,
 			offset: 0
 		};
-		this.updateSwitchModelTable = this.updateSwitchModelTable.bind(this);
+		this.updatePopTable = this.updatePopTable.bind(this);
 		this.list = this.list.bind(this);
 		this.handleChangePage = this.handleChangePage.bind(this);
 		this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
@@ -50,15 +49,15 @@ class SwitchModelList extends Component {
 	    requests(null, "GET", {
     		"Content-Type": "application/json",
     		"ApiKey": "3ada8f87cef4d41dbb385e41d0d55305b649161b"
-    	}, "http://fast.api.local.com/api/switchmodel/?offset="+offset+"&limit="+limit, this.updateSwitchModelTable);
+    	}, "http://fast.api.local.com/api/pop/?offset="+offset+"&limit="+limit, this.updatePopTable);
 	}
 	
-	updateSwitchModelTable(arraySwitchModel){
+	updatePopTable(arrayPop){
 		this.setState(prevState => ({
-			arraySwitchModel: ((arraySwitchModel.data.length > 0) ? arraySwitchModel.data : []),
-			total: arraySwitchModel.total,
-			offset: arraySwitchModel.offset,
-			rowsPerPage: arraySwitchModel.limit
+			arrayPop: ((arrayPop.data.length > 0) ? arrayPop.data : []),
+			total: arrayPop.total,
+			offset: arrayPop.offset,
+			rowsPerPage: arrayPop.limit
 		}));
 	}
 
@@ -72,8 +71,7 @@ class SwitchModelList extends Component {
 	        	        	<TableHead>
 	        	        		<TableRow>
 	        	        			<StyledTableCell align="right">ID</StyledTableCell>
-	        	        			<StyledTableCell align="right">Brand</StyledTableCell>
-	        	        			<StyledTableCell align="right">Model</StyledTableCell>
+	        	        			<StyledTableCell align="right">Name</StyledTableCell>
 	        	        			<StyledTableCell align="right">Active</StyledTableCell>
 	        	        			<StyledTableCell align="right">Created At</StyledTableCell>
 	        	        			<StyledTableCell align="right">Actions</StyledTableCell>
@@ -81,12 +79,11 @@ class SwitchModelList extends Component {
 	        	        	</TableHead>
 	        	        	<TableBody>
 	        	        	{
-	        	    			this.state.arraySwitchModel.map(function(obj, idx){
+	        	    			this.state.arrayPop.map(function(obj, idx){
 	        	    				let date = new Date(obj.createdAt);
 	        	            		return (
 	        	            			<StyledTableRow key={idx}>
 			        	        			<StyledTableCell align="right">{obj.id}</StyledTableCell>
-			        	        			<StyledTableCell align="right">{obj.brand}</StyledTableCell>
 			        	        			<StyledTableCell align="right">{obj.name}</StyledTableCell>
 			        	        			<StyledTableCell align="right">{obj.active?"Yes":"No"}</StyledTableCell>
 			        	        			<StyledTableCell align="right">{date.toLocaleDateString()}</StyledTableCell>
@@ -122,4 +119,4 @@ class SwitchModelList extends Component {
 	}
 }
 
-export default withStyles(styles)(SwitchModelList);
+export default withStyles(styles)(PopList);

@@ -28,12 +28,12 @@ class App extends Component {
 							)
 						}
 					/>
-					<PrivateRoute path="/home" component={Home} update={this.props.setAppState}  appState={this.props.appState} />
-					<PrivateRoute path="/switchmodel" component={SwitchModel} update={this.props.setAppState}  appState={this.props.appState} />
-					<PrivateRoute path="/pop" component={Pop} update={this.props.setAppState}  appState={this.props.appState} />
-					<PrivateRoute path="/service" component={Service} update={this.props.setAppState}  appState={this.props.appState} />
-					<PrivateRoute path="/switchs" component={Switchs} update={this.props.setAppState}  appState={this.props.appState} />
-					<PrivateRoute path="/vlan" component={Vlan} update={this.props.setAppState}  appState={this.props.appState} />
+					<PrivateRoute path="/home" component={Home} update={this.props.setAppState} appState={this.props.appState} />
+					<PrivateRoute path="/switchmodel" component={SwitchModel} update={this.props.setAppState} appState={this.props.appState} />
+					<PrivateRoute path="/pop" component={Pop} update={this.props.setAppState} appState={this.props.appState} />
+					<PrivateRoute path="/service" component={Service} update={this.props.setAppState} appState={this.props.appState} />
+					<PrivateRoute path="/switchs" component={Switchs} update={this.props.setAppState} appState={this.props.appState} />
+					<PrivateRoute path="/vlan" component={Vlan} update={this.props.setAppState} appState={this.props.appState} />
 					<Route
 						exact={true}
 						path='*'

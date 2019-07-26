@@ -1,5 +1,5 @@
 import { createMuiTheme } from '@material-ui/core/styles';
-import { amber, green } from '@material-ui/core/colors';
+import { amber, green, blue } from '@material-ui/core/colors';
 
 const drawerWidth = 240;
 
@@ -103,6 +103,15 @@ export const styles = {
 	},
 	iconSmall: {
 		fontSize: 20
+	},
+	iconHover: {
+	    margin: theme.spacing(1),
+	    color: blue,
+		fontSize: 20,
+	    '&:hover': {
+	      color: blue[800],
+	      cursor: "pointer"
+	    },
 	},
 	success: {
 		backgroundColor: green[600],

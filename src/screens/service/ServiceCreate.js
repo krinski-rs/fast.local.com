@@ -13,31 +13,16 @@ import { requests, getData } from '../../components/util/request';
 import { styles } from '../../css/base.js';
 import { variantIcon } from '../../config/css/login';
 
-class SwitchModelCreate extends Component {
+class ServiceCreate extends Component {
 	constructor(props) {
 		super(props);		
 		this.state = {
 			open: false,
 			mensagem: '',
 			error: false,
-			arrayBrand: [],
 		};
-		this.updateBrand = this.updateBrand.bind(this);
 		this.save = this.save.bind(this);
 		this.closeNotifier = this.closeNotifier.bind(this);
-	}
-	
-	getBrands(){
-	    requests(null, "GET", {
-    		"Content-Type": "application/json",
-    		"ApiKey": "3ada8f87cef4d41dbb385e41d0d55305b649161b"
-    	}, "http://fast.api.local.com/api/switchmodel/brand", this.updateBrand);
-	}
-
-	updateBrand(arrayBrand){
-		this.setState(prevState => ({
-			arrayBrand: ((arrayBrand.length > 0) ? arrayBrand : [])
-		}));
 	}
 	
 	closeNotifier(){
@@ -46,10 +31,6 @@ class SwitchModelCreate extends Component {
 			error: false,
 			mensagem: '',
 		}));
-	}
-	
-	componentDidMount() {
-	    this.getBrands();
 	}
 	
 	save(event){
@@ -66,14 +47,14 @@ class SwitchModelCreate extends Component {
 	    var retorno = requests(data, "POST", {
     		"Content-Type": "application/json",
     		"ApiKey": "3ada8f87cef4d41dbb385e41d0d55305b649161b"
-    	}, "http://fast.api.local.com/api/switchmodel/", null);
+    	}, "http://fast.api.local.com/api/service/", null);
 	    retorno.then((obj)=>{
 		    if(obj.ok){
 		    	obj.json().then((json)=>{
     				this.setState(prevState => ({
     					error: false,
     					open:true,
-    					mensagem: "SwitchModel id '"+json.id+"' cadastrado com sucesso!!"
+    					mensagem: "Service id '"+json.id+"' cadastrado com sucesso!!"
     				}));
 		    	});
 		    }else{
@@ -100,9 +81,8 @@ class SwitchModelCreate extends Component {
 		return (
 		    <form noValidate autoComplete="off" onSubmit={this.save} name="modelSwitchForm">			    	
 	    		<Paper className={fixedHeightPaper}>
-					<Grid container spacing={3} alignItems="center"
-						  justify="center">
-			    		<Grid item xs={6}>
+					<Grid container spacing={3} alignItems="center" justify="center">
+			    		<Grid item xs={12}>
 				    		<TextField
 				    			autoFocus
 					            margin="dense"
@@ -115,63 +95,7 @@ class SwitchModelCreate extends Component {
 					            error={ this.state.error }
 				    			variant="outlined"
 					        />
-				        </Grid>
-			    		<Grid item xs={6}>
-					        <TextField
-								id="brand"
-								name="brand"
-								margin="dense"
-								select
-								fullWidth
-					            required
-								label="Select Brand"
-								variant="outlined"
-								SelectProps={{
-									native: true
-								}}
-							>
-		    	        	{
-		    	    			this.state.arrayBrand.map(function(obj, idx){
-		    	            		return (
-		    	            			<option key={"brand_"+idx} value={obj}>{ obj }</option>
-			        	        	)
-		    	            	})
-		    	        	}
-				    		</TextField>
-				        </Grid>
-			    		<Grid item xs={4}>
-				    		<TextField
-					            margin="dense"
-					            id="portFe"
-					            name="portFe"
-					            label="Nº de Portas FE"
-					            type="text"
-					            fullWidth
-				    			variant="outlined"
-					        />
-				        </Grid>
-			    		<Grid item xs={4}>
-				    		<TextField
-					            margin="dense"
-					            id="portGe"
-					            name="portGe"
-					            label="Nº de Portas GE"
-					            type="text"
-					            fullWidth
-				    			variant="outlined"
-					        />
-				        </Grid>
-			    		<Grid item xs={4}>
-				    		<TextField
-					            margin="dense"
-					            id="port10Ge"
-					            name="port10Ge"
-					            label="Nº de Portas 10GE"
-					            type="text"
-					            fullWidth
-				    			variant="outlined"
-					        />
-				        </Grid>
+					    </Grid>
 			    		<Grid item xs={2}>
 			    			<Button type="submit" color="primary">
 			    				<SaveIcon className={clsx(this.props.classes.leftIcon, this.props.classes.iconSmall)} />
@@ -210,4 +134,4 @@ class SwitchModelCreate extends Component {
 	}
 }
 
-export default withStyles(styles)(SwitchModelCreate);
+export default withStyles(styles)(ServiceCreate);

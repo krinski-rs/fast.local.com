@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import {
-	Switch
-} from "react-router-dom";
+import { Switch } from "react-router-dom";
 import clsx from 'clsx';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -116,10 +114,10 @@ class SwitchModel extends Component {
 			    <main className={ this.props.classes.content }>
 	        		<div className={ this.props.classes.appBarSpacer } />
 			        <Container maxWidth="lg" className={ this.props.classes.container }>
-							<Switch>
-								<PrivateRoute path="/switchmodel/create" component={SwitchModelCreate} appState={ this.props.appState } update={ this.props.setAppState } />
-								<PrivateRoute path="/switchmodel" component={SwitchModelList} appState={ this.props.appState } update={ this.props.setAppState } />
-							</Switch>
+						<Switch>
+							<PrivateRoute path="/switchmodel/create" component={SwitchModelCreate} appState={ this.props.appState } update={ this.props.setAppState } />
+							<PrivateRoute path="/switchmodel" component={SwitchModelList} appState={ this.props.appState } update={ this.props.setAppState } />
+						</Switch>
 			        </Container>
 					<Footer />
 			    </main>
