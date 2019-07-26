@@ -218,7 +218,7 @@ class SwitchsCreate extends Component {
 	        	        	}
 				    		</TextField>
 				        </Grid>
-			    		<Grid item xs={12} md={6}>
+			    		<Grid item xs={12} md={4}>
 				    		<TextField
 			            		margin="dense"
 					            id="username"
@@ -229,12 +229,23 @@ class SwitchsCreate extends Component {
 				    			variant="outlined"
 					        />
 				        </Grid>
-			    		<Grid item xs={12} md={6}>
+			    		<Grid item xs={12} md={4}>
 				    		<TextField
 			            		margin="dense"
 					            id="password"
 					            name="password"
 					            label="Password"
+					            type="password"
+					            fullWidth
+				    			variant="outlined"
+					        />
+				        </Grid>
+			    		<Grid item xs={12} md={4}>
+				    		<TextField
+			            		margin="dense"
+					            id="community"
+					            name="community"
+					            label="Community"
 					            type="text"
 					            fullWidth
 				    			variant="outlined"
