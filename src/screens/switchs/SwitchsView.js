@@ -6,8 +6,8 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import SvgIcon from '@material-ui/core/SvgIcon';
-import IconButton from '@material-ui/core/IconButton';
+//import SvgIcon from '@material-ui/core/SvgIcon';
+//import IconButton from '@material-ui/core/IconButton';
 import clsx from 'clsx';
 import { withStyles } from '@material-ui/core/styles';
 import { requests } from '../../components/util/request';
@@ -175,7 +175,7 @@ class SwitchsView extends Component {
 				    			value={ this.state.objSwitch !== null ? this.state.objSwitch.addressIpv6 !== null ? this.state.objSwitch.addressIpv6 : "" : ""}
 					        />
 				        </Grid>
-			    		<Grid item xs={12} md={12}>
+			    		{/*<Grid item xs={12} md={12}>
 							<IconButton key="status" aria-label="Status" color="primary">
 								<SvgIcon titleAccess="Status Porta">
 									<path d="M12,4C15.64,4 18.67,6.59 19.35,10.04C21.95,10.22 24,12.36 24,15A5,5 0 0,1 19,20H6A6,6 0 0,1 0,14C0,10.91 2.34,8.36 5.35,8.04C6.6,5.64 9.11,4 12,4M7.5,9.69C6.06,11.5 6.2,14.06 7.82,15.68C8.66,16.5 9.81,17 11,17V18.86L13.83,16.04L11,13.21V15C10.34,15 9.7,14.74 9.23,14.27C8.39,13.43 8.26,12.11 8.92,11.12L7.5,9.69M9.17,8.97L10.62,10.42L12,11.79V10C12.66,10 13.3,10.26 13.77,10.73C14.61,11.57 14.74,12.89 14.08,13.88L15.5,15.31C16.94,13.5 16.8,10.94 15.18,9.32C14.34,8.5 13.19,8 12,8V6.14L9.17,8.97Z"/>
@@ -186,13 +186,15 @@ class SwitchsView extends Component {
 									<path d="M4,1C2.89,1 2,1.89 2,3V7C2,8.11 2.89,9 4,9H1V11H13V9H10C11.11,9 12,8.11 12,7V3C12,1.89 11.11,1 10,1H4M4,3H10V7H4V3M3,13V18L3,20H10V18H5V13H3M14,13C12.89,13 12,13.89 12,15V19C12,20.11 12.89,21 14,21H11V23H23V21H20C21.11,21 22,20.11 22,19V15C22,13.89 21.11,13 20,13H14M14,15H20V19H14V15Z"/>
 								</SvgIcon>
 							</IconButton>
-				        </Grid>
+				        </Grid>*/}
 			    		<Grid item xs={12} md={12}>
 		        	        <Table className={this.props.classes.table} size="small">
 		        	        	<TableHead>
+	        	        			<TableRow>
+	        	        				<StyledTableCell  colSpan={7} align="center">Ports</StyledTableCell>
+		        	        		</TableRow>
 		        	        		<TableRow>
-		        	        			<StyledTableCell align="right">ID</StyledTableCell>
-		        	        			<StyledTableCell align="right">Name</StyledTableCell>
+		        	        			<StyledTableCell align="right">Port</StyledTableCell>
 		        	        			<StyledTableCell align="right">Description</StyledTableCell>
 		        	        			<StyledTableCell align="right">Admin Status</StyledTableCell>
 		        	        			<StyledTableCell align="right">Oper Status</StyledTableCell>
@@ -206,14 +208,48 @@ class SwitchsView extends Component {
 		        	        		this.state.objSwitch ? this.state.objSwitch.port.map((obj, idx) => {
 		        	            		return (
 		        	            			<StyledTableRow key={"port_"+idx}>
-				        	        			<StyledTableCell align="right">{ ("000000"+obj.id).slice(-6) }</StyledTableCell>
 				        	        			<StyledTableCell align="right">{ obj.type+ ("00"+obj.numbering).slice(-2) }</StyledTableCell>
-				        	        			<StyledTableCell align="right">&nbsp;</StyledTableCell>
-				        	        			<StyledTableCell align="right">{ obj.adminStatus ? obj.adminStatus : " " }</StyledTableCell>
-				        	        			<StyledTableCell align="right">{ obj.operStatus ? obj.operStatus : " " }</StyledTableCell>
-				        	        			<StyledTableCell align="right">{ obj.autoNeg !== null ? obj.autoNeg ? "ACTIVE" : "" : " " }</StyledTableCell>
-				        	        			<StyledTableCell align="right">{ obj.speed ? obj.speed : " " }</StyledTableCell>
-				        	        			<StyledTableCell align="right">{ obj.duplex ? obj.duplex : " " }</StyledTableCell>
+				        	        			<StyledTableCell align="right">{ obj.destiny ? obj.destiny : "-" }</StyledTableCell>
+				        	        			<StyledTableCell align="right">{ obj.adminStatus ? obj.adminStatus : "-" }</StyledTableCell>
+				        	        			<StyledTableCell align="right">{ obj.operStatus ? obj.operStatus : "-" }</StyledTableCell>
+				        	        			<StyledTableCell align="right">{ obj.autoNeg !== null ? obj.autoNeg ? "ACTIVE" : "-" : "-" }</StyledTableCell>
+				        	        			<StyledTableCell align="right">{ obj.speed ? obj.speed : "-" }</StyledTableCell>
+				        	        			<StyledTableCell align="right">{ obj.duplex ? obj.duplex : "-" }</StyledTableCell>
+				        	        		</StyledTableRow>
+				        	        	)
+		        	            	}) : <StyledTableRow key={"port_0"} colSpan={8}><StyledTableCell align="right">&nbsp;</StyledTableCell></StyledTableRow>
+		        	        	}
+		        	        	</TableBody>
+		        	        </Table>
+				        </Grid>
+			    		<Grid item xs={12} md={12}>
+		        	        <Table className={this.props.classes.table} size="small">
+		        	        	<TableHead>
+	        	        			<TableRow>
+	        	        				<StyledTableCell  colSpan={7} align="center">Vlans</StyledTableCell>
+		        	        		</TableRow>
+		        	        		<TableRow>
+		        	        			<StyledTableCell align="right">Port</StyledTableCell>
+		        	        			<StyledTableCell align="right">Description</StyledTableCell>
+		        	        			<StyledTableCell align="right">Admin Status</StyledTableCell>
+		        	        			<StyledTableCell align="right">Oper Status</StyledTableCell>
+		        	        			<StyledTableCell align="right">Auto Negotiation</StyledTableCell>
+		        	        			<StyledTableCell align="right">Speed</StyledTableCell>
+		        	        			<StyledTableCell align="right">Duplex</StyledTableCell>
+		        	        		</TableRow>
+		        	        	</TableHead>
+		        	        	<TableBody>
+		        	        	{
+		        	        		this.state.objSwitch ? this.state.objSwitch.port.map((obj, idx) => {
+		        	            		return (
+		        	            			<StyledTableRow key={"port_"+idx}>
+				        	        			<StyledTableCell align="right">{ obj.type+ ("00"+obj.numbering).slice(-2) }</StyledTableCell>
+				        	        			<StyledTableCell align="right">{ obj.destiny ? obj.destiny : "-" }</StyledTableCell>
+				        	        			<StyledTableCell align="right">{ obj.adminStatus ? obj.adminStatus : "-" }</StyledTableCell>
+				        	        			<StyledTableCell align="right">{ obj.operStatus ? obj.operStatus : "-" }</StyledTableCell>
+				        	        			<StyledTableCell align="right">{ obj.autoNeg !== null ? obj.autoNeg ? "ACTIVE" : "-" : "-" }</StyledTableCell>
+				        	        			<StyledTableCell align="right">{ obj.speed ? obj.speed : "-" }</StyledTableCell>
+				        	        			<StyledTableCell align="right">{ obj.duplex ? obj.duplex : "-" }</StyledTableCell>
 				        	        		</StyledTableRow>
 				        	        	)
 		        	            	}) : <StyledTableRow key={"port_0"} colSpan={8}><StyledTableCell align="right">&nbsp;</StyledTableCell></StyledTableRow>
