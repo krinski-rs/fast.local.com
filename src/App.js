@@ -1,178 +1,714 @@
 import React from 'react';
-
-import {
-	Router,
-	Switch,
-	Route,
-} from "react-router-dom";
-import { createBrowserHistory } from "history";
-
-import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
-import Container from '@material-ui/core/Container';
-import Link from '@material-ui/core/Link';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import AssignmentIcon from '@material-ui/icons/Assignment';
-import SvgIcon from '@material-ui/core/SvgIcon';
-import { withStyles } from '@material-ui/core/styles';
 
-import { useStyles } from "./assets/jss/base";
+import './style.css';
+import './reset.css';
+import icon_32_computer from './assets/images/icons/icon_32_computer.png';
+import icon_32_drive from './assets/images/icons/icon_32_drive.png';
+import icon_32_disc from './assets/images/icons/icon_32_disc.png';
+import icon_32_network from './assets/images/icons/icon_32_network.png';
 
-import Dashboard from "./screens/home/Dashboard";
-var hist = createBrowserHistory();
 
-function Copyright() {
-    return (
-      <Typography variant="body2" color="textSecondary" align="center">
-        {'Copyright © '}
-        <Link color="inherit" href="https://material-ui.com/">
-          Your Website
-        </Link>{' '}
-        {new Date().getFullYear()}
-        {'.'}
-      </Typography>
-    );
-  }
-  
-class App extends React.Component
-{
-	constructor(props) {
-		super(props);		
-		this.state = {
-			open: true
-		};
-		this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
-	}
-	
-	handleDrawerOpen(event) {
-		event.preventDefault();
-		this.setState(prevState => ({
-			open: !prevState.open
-		}));
-	}
+
+
+class App extends React.Component {
 
     render() {
         return (
-            <div className={this.props.classes.root}>
+            <React.Fragment>
                 <CssBaseline />
-                <AppBar position="absolute" className={clsx(this.props.classes.appBar, this.state.open && this.props.classes.appBarShift)}>
-                    <Toolbar className={this.props.classes.toolbar}>
-                        <IconButton
-                            edge="start"
-                            color="inherit"
-                            aria-label="open drawer"
-                            onClick={this.handleDrawerOpen}
-                            className={clsx(this.props.classes.menuButton, this.state.open && this.props.classes.menuButtonHidden)}
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                        <Typography component="h1" variant="h6" color="inherit" noWrap className={this.props.classes.title}>
-                            Dashboard
-                        </Typography>
-                        <IconButton color="inherit">
-                            <Badge badgeContent={4} color="secondary">
-                                <NotificationsIcon />
-                            </Badge>
-                        </IconButton>
-                    </Toolbar>
-                </AppBar>
-                <Drawer
-                    variant="permanent"
-                    classes={{
-                        paper: clsx(this.props.classes.drawerPaper, !this.state.open && this.props.classes.drawerPaperClose),
-                    }}
-                    open={this.state.open}
-                >
-                    <div className={this.props.classes.toolbarIcon}>
-                        <IconButton onClick={this.handleDrawerOpen}>
-                            <ChevronLeftIcon />
-                        </IconButton>
+                <div className="abs" id="wrapper">
+                    <div className="abs" id="desktop">
+                        <a className="abs icon" style={{ left: "20px", top: "20px" }} href="#icon_dock_computer">
+                            <img src={icon_32_computer} alt="" />
+                            Computer
+                        </a>
+                        <a className="abs icon" style={{ left: "20px", top: "100px" }} href="#icon_dock_drive">
+                            <img src={icon_32_drive} alt="" />
+                            Hard Drive
+                        </a>
+                        <a className="abs icon" style={{ left: "20px", top: "180px" }} href="#icon_dock_disc">
+                            <img src={icon_32_disc} alt="" />
+                            Audio CD
+                        </a>
+                        <a className="abs icon" style={{ left: "20px", top: "260px" }} href="#icon_dock_network">
+                            <img src={icon_32_network} alt="" />
+                            Network
+                        </a>
+                        <div id="window_computer" className="abs window">
+                            <div className="abs window_inner">
+                                <div className="window_top">
+                                    <span className="float_left">
+                                        <img src="assets/images/icons/icon_16_computer.png" alt="" />
+                                        Computer
+                                    </span>
+                                    <span className="float_right">
+                                        <a href="#" className="window_min"></a>
+                                        <a href="#" className="window_resize"></a>
+                                        <a href="#icon_dock_computer" className="window_close"></a>
+                                    </span>
+                                </div>
+                                <div className="abs window_content">
+                                    <div className="window_aside">
+                                        Hello. You look nice today!
+                                    </div>
+                                    <div className="window_main">
+                                        <table className="data">
+                                            <thead>
+                                                <tr>
+                                                    <th className="shrink">&nbsp;</th>
+                                                    <th>Name</th>
+                                                    <th>Date Modified</th>
+                                                    <th>Date Created</th>
+                                                    <th>Size</th>
+                                                    <th>Kind</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>    <img src="assets/images/icons/icon_16_drive.png" alt="" />
+                                                    </td>
+                                                    <td>Hard Drive</td>
+                                                    <td>Today</td>
+                                                    <td>&mdash;</td>
+                                                    <td>200 GB</td>
+                                                    <td>Volume</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>    <img src="assets/images/icons/icon_16_disc.png" alt="" />
+                                                    </td>
+                                                    <td>Audio CD</td>
+                                                    <td>&mdash;</td>
+                                                    <td>&mdash;</td>
+                                                    <td>2.92 GB</td>
+                                                    <td>Media</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>    <img src="assets/images/icons/icon_16_network.png" alt="" />
+                                                    </td>
+                                                    <td>Network</td>
+                                                    <td>&mdash;</td>
+                                                    <td>&mdash;</td>
+                                                    <td>&mdash;</td>
+                                                    <td>LAN</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_folder_remote.png" alt="" />
+                                                    </td>
+                                                    <td>Shared Project Files</td>
+                                                    <td>Yesterday</td>
+                                                    <td>12/29/08</td>
+                                                    <td>524 MB</td>
+                                                    <td>Folder</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_documents.png" alt="" />
+                                                    </td>
+                                                    <td>Documents</td>
+                                                    <td>Yesterday</td>
+                                                    <td>12/29/08</td>
+                                                    <td>524 MB</td>
+                                                    <td>Folder</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_system.png" alt="" />
+                                                    </td>
+                                                    <td>Preferences</td>
+                                                    <td>&mdash;</td>
+                                                    <td>&mdash;</td>
+                                                    <td>&mdash;</td>
+                                                    <td>System</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>    <img src="assets/images/icons/icon_16_trash.png" alt="" />
+                                                    </td>
+                                                    <td>Trash</td>
+                                                    <td>Today</td>
+                                                    <td>&mdash;</td>
+                                                    <td>&mdash;</td>
+                                                    <td>Bin</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div className="abs window_bottom">Build: TK421</div>
+                            </div>
+                            <span className="abs ui-resizable-handle ui-resizable-se"></span>
+                        </div>
+                        <div id="window_drive" className="abs window">
+                            <div className="abs window_inner">
+                                <div className="window_top">
+                                    <span className="float_left">
+                                        <img src="assets/images/icons/icon_16_drive.png" alt="" />
+                                        Hard Drive
+                                </span>
+                                    <span className="float_right">
+                                        <a href="#" className="window_min"></a>
+                                        <a href="#" className="window_resize"></a>
+                                        <a href="#icon_dock_drive" className="window_close"></a>
+                                    </span>
+                                </div>
+                                <div className="abs window_content">
+                                    <div className="window_aside">
+                                        Storage in use: 119.1 GB
+                                    </div>
+                                    <div className="window_main">
+                                        <table className="data">
+                                            <thead>
+                                                <tr>
+                                                    <th className="shrink">&nbsp;</th>
+                                                    <th>Name</th>
+                                                    <th>Date Modified</th>
+                                                    <th>Date Created</th>
+                                                    <th>Size</th>
+                                                    <th>Kind</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_page.png" alt="" />
+                                                    </td>
+                                                    <td>.DS_Store</td>
+                                                    <td>Yesterday</td>
+                                                    <td>&mdash;</td>
+                                                    <td>6 KB</td>
+                                                    <td>Hidden</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_folder_home.png" alt="" />
+                                                    </td>
+                                                    <td>Default User</td>
+                                                    <td>Today</td>
+                                                    <td>&mdash;</td>
+                                                    <td>&mdash;</td>
+                                                    <td>Folder</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_folder.png" alt="" />
+                                                    </td>
+                                                    <td>Applications</td>
+                                                    <td>Yesterday</td>
+                                                    <td>&mdash;</td>
+                                                    <td>&mdash;</td>
+                                                    <td>Folder</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_folder.png" alt="" />
+                                                    </td>
+                                                    <td>Developer</td>
+                                                    <td>12/29/08</td>
+                                                    <td>&mdash;</td>
+                                                    <td>&mdash;</td>
+                                                    <td>Folder</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_folder.png" alt="" />
+                                                    </td>
+                                                    <td>Library</td>
+                                                    <td>09/11/09</td>
+                                                    <td>&mdash;</td>
+                                                    <td>&mdash;</td>
+                                                    <td>Folder</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_folder.png" alt="" />
+                                                    </td>
+                                                    <td>System</td>
+                                                    <td>Yesterday</td>
+                                                    <td>&mdash;</td>
+                                                    <td>&mdash;</td>
+                                                    <td>Folder</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div className="abs window_bottom">
+                                    Free: 80.9 GB
+                                </div>
+                            </div>
+                            <span className="abs ui-resizable-handle ui-resizable-se"></span>
+                        </div>
+                        <div id="window_disc" className="abs window">
+                            <div className="abs window_inner">
+                                <div className="window_top">
+                                    <span className="float_left">
+                                        <img src="assets/images/icons/icon_16_disc.png" alt="" />
+                                        Audio CD - Title of Album
+                                    </span>
+                                    <span className="float_right">
+                                        <a href="#" className="window_min"></a>
+                                        <a href="#" className="window_resize"></a>
+                                        <a href="#icon_dock_disc" className="window_close"></a>
+                                    </span>
+                                </div>
+                                <div className="abs window_content">
+                                    <div className="window_aside align_center">
+                                        <img src="assets/images/misc/album_cover.jpg" alt="" />
+                                        <br />
+                                        <em>Title of Album</em>
+                                    </div>
+                                    <div className="window_main">
+                                        <table className="data">
+                                            <thead>
+                                                <tr>
+                                                    <th className="shrink">&nbsp;</th>
+                                                    <th className="shrink">Track</th>
+                                                    <th>Song Name</th>
+                                                    <th className="shrink">Length</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_music.png" alt="" />
+                                                    </td>
+                                                    <td className="align_center">01</td>
+                                                    <td>Track One</td>
+                                                    <td className="align_right">3:50</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_music.png" alt="" />
+                                                    </td>
+                                                    <td className="align_center">02</td>
+                                                    <td>Track Two</td>
+                                                    <td className="align_right">3:50</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_music.png" alt="" />
+                                                    </td>
+                                                    <td className="align_center">
+                                                        03</td>
+                                                    <td>Track Three</td>
+                                                    <td className="align_right">4:02</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_music.png" alt="" />
+                                                    </td>
+                                                    <td className="align_center">
+                                                        04</td>
+                                                    <td>Track Four</td>
+                                                    <td className="align_right">3:47</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_music.png" alt="" />
+                                                    </td>
+                                                    <td className="align_center">
+                                                        05</td>
+                                                    <td>Track Five</td>
+                                                    <td className="align_right">4:38</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_music.png" alt="" />
+                                                    </td>
+                                                    <td className="align_center">
+                                                        06</td>
+                                                    <td>Track Six</td>
+                                                    <td className="align_right">3:16</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_music.png" alt="" />
+                                                    </td>
+                                                    <td className="align_center">07</td>
+                                                    <td>Track Seven</td>
+                                                    <td className="align_right">3:53</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_music.png" alt="" />
+                                                    </td>
+                                                    <td className="align_center">08</td>
+                                                    <td>Track Eight</td>
+                                                    <td className="align_right">1:41</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_music.png" alt="" />
+                                                    </td>
+                                                    <td className="align_center">09</td>
+                                                    <td>Track Nine</td>
+                                                    <td className="align_right">3:40</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_music.png" alt="" />
+                                                    </td>
+                                                    <td className="align_center">10</td>
+                                                    <td>Track Ten</td>
+                                                    <td className="align_right">4:33</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_music.png" alt="" />
+                                                    </td>
+                                                    <td className="align_center">11</td>
+                                                    <td>Track Eleven</td>
+                                                    <td className="align_right">3:49</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_music.png" alt="" />
+                                                    </td>
+                                                    <td className="align_center">12</td>
+                                                    <td>Track Twelve</td>
+                                                    <td className="align_right">1:11</td>
+                                                </tr>
+                                                <tr>
+                                                    <td className="shrink">
+                                                        <img src="assets/images/icons/icon_16_music.png" alt="" />
+                                                    </td>
+                                                    <td className="align_center">13</td>
+                                                    <td>Track Thirteen</td>
+                                                    <td className="align_right">6:17</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div className="abs window_bottom">
+                                    Genre: Rock/Rap
+                                </div>
+                            </div>
+                            <span className="abs ui-resizable-handle ui-resizable-se"></span>
+                        </div>
+                        <div id="window_network" className="abs window">
+                            <div className="abs window_inner">
+                                <div className="window_top">
+                                    <span className="float_left">
+                                        <img src="assets/images/icons/icon_16_network.png" alt="" />
+                                        Network
+                                    </span>
+                                    <span className="float_right">
+                                        <a href="#" className="window_min"></a>
+                                        <a href="#" className="window_resize"></a>
+                                        <a href="#icon_dock_network" className="window_close"></a>
+                                    </span>
+                                </div>
+                                <div className="abs window_content">
+                                    <div className="window_aside">
+                                        Local Network Resources
+                                    </div>
+                                    <div className="window_main">
+                                        <table className="data">
+                                            <thead>
+                                                <tr>
+                                                    <th className="shrink">&nbsp;</th>
+                                                    <th>Name</th>
+                                                    <th className="shrink">Operating System</th>
+                                                    <th className="shrink">Version</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_server.png" alt="" />
+                                                    </td>
+                                                    <td>Urban Terror - <em>Game Server</em>
+                                                    </td>
+                                                    <td>Linux</td>
+                                                    <td>Ubuntu</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_folder_remote.png" alt="" />
+                                                    </td>
+                                                    <td>Shared Project Files</td>
+                                                    <td>Linux</td>
+                                                    <td>Red Hat</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_vpn.png" alt="" />
+                                                    </td>
+                                                    <td>Remote Desktop VPN</td>
+                                                    <td>Windows</td>
+                                                    <td>XP</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_computer.png" alt="" />
+                                                    </td>
+                                                    <td>Michael Scott</td>
+                                                    <td>Mac OS</td>
+                                                    <td>10.5</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_computer.png" alt="" />
+                                                    </td>
+                                                    <td>Dwight Schrute</td>
+                                                    <td>Mac OS</td>
+                                                    <td>10.6</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_computer.png" alt="" />
+                                                    </td>
+                                                    <td>Jim Halpert</td>
+                                                    <td>Mac OS</td>
+                                                    <td>10.6</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_computer.png" alt="" />
+                                                    </td>
+                                                    <td>Pam Beesly</td>
+                                                    <td>Mac OS</td>
+                                                    <td>10.5</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_computer.png" alt="" />
+                                                    </td>
+                                                    <td>Ryan Howard</td>
+                                                    <td>Mac OS</td>
+                                                    <td>10.5</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_computer.png" alt="" />
+                                                    </td>
+                                                    <td>Jan Levinson</td>
+                                                    <td>Mac OS</td>
+                                                    <td>10.5</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_computer.png" alt="" />
+                                                    </td>
+                                                    <td>Roy Anderson</td>
+                                                    <td>Windows</td>
+                                                    <td>7</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_computer.png" alt="" />
+                                                    </td>
+                                                    <td>Stanley Hudson</td>
+                                                    <td>Windows</td>
+                                                    <td>Vista</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_computer.png" alt="" />
+                                                    </td>
+                                                    <td>Kevin Malone</td>
+                                                    <td>Windows</td>
+                                                    <td>Vista</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_computer.png" alt="" />
+                                                    </td>
+                                                    <td>Angela Martin</td>
+                                                    <td>Windows</td>
+                                                    <td>Vista</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_computer.png" alt="" />
+                                                    </td>
+                                                    <td>Oscar Martinez</td>
+                                                    <td>Windows</td>
+                                                    <td>Vista</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_computer.png" alt="" />
+                                                    </td>
+                                                    <td>Phyllis Lapin</td>
+                                                    <td>Windows</td>
+                                                    <td>Vista</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_computer.png" alt="" />
+                                                    </td>
+                                                    <td>Creed Bratton</td>
+                                                    <td>Windows</td>
+                                                    <td>7</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_computer.png" alt="" />
+                                                    </td>
+                                                    <td>Meredith Palmer</td>
+                                                    <td>Windows</td>
+                                                    <td>Vista</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_computer.png" alt="" />
+                                                    </td>
+                                                    <td>Toby Flenderson</td>
+                                                    <td>Windows</td>
+                                                    <td>Vista</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_computer.png" alt="" />
+                                                    </td>
+                                                    <td>Darryl Philbin</td>
+                                                    <td>Windows</td>
+                                                    <td>Vista</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_computer.png" alt="" />
+                                                    </td>
+                                                    <td>Kelly Kapoor</td>
+                                                    <td>Windows</td>
+                                                    <td>Vista</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img src="assets/images/icons/icon_16_computer.png" alt="" />
+                                                    </td>
+                                                    <td>Andy Bernard</td>
+                                                    <td>Windows</td>
+                                                    <td>Vista</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div className="abs window_bottom">
+                                    LAN: Corporate Intranet
+                                </div>
+                            </div>
+                            <span className="abs ui-resizable-handle ui-resizable-se"></span>
+                        </div>
                     </div>
-                    <Divider />
-                    <List>
-                        <ListItem button>
-                            <ListItemIcon>
-                                <SvgIcon>
-                                    <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
-                                </SvgIcon>
-                            </ListItemIcon>
-                            <ListItemText primary="Dashboard" />
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemIcon>
-                                <SvgIcon>
-                                    <path d="M20.2 5.9l.8-.8C19.6 3.7 17.8 3 16 3s-3.6.7-5 2.1l.8.8C13 4.8 14.5 4.2 16 4.2s3 .6 4.2 1.7zm-.9.8c-.9-.9-2.1-1.4-3.3-1.4s-2.4.5-3.3 1.4l.8.8c.7-.7 1.6-1 2.5-1 .9 0 1.8.3 2.5 1l.8-.8zM19 13h-2V9h-2v4H5c-1.1 0-2 .9-2 2v4c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-4c0-1.1-.9-2-2-2zM8 18H6v-2h2v2zm3.5 0h-2v-2h2v2zm3.5 0h-2v-2h2v2z" />
-                                </SvgIcon>
-                            </ListItemIcon>
-                            <ListItemText primary="Switchs" />
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemIcon>
-                                <SvgIcon>
-                                    <path d="M9 3L5 6.99h3V14h2V6.99h3L9 3zm7 14.01V10h-2v7.01h-3L15 21l4-3.99h-3z" />
-                                </SvgIcon>
-                            </ListItemIcon>
-                            <ListItemText primary="Vlans" />
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemIcon>
-                                <SvgIcon>
-                                    <path d="M12 5c-3.87 0-7 3.13-7 7h2c0-2.76 2.24-5 5-5s5 2.24 5 5h2c0-3.87-3.13-7-7-7zm1 9.29c.88-.39 1.5-1.26 1.5-2.29 0-1.38-1.12-2.5-2.5-2.5S9.5 10.62 9.5 12c0 1.02.62 1.9 1.5 2.29v3.3L7.59 21 9 22.41l3-3 3 3L16.41 21 13 17.59v-3.3zM12 1C5.93 1 1 5.93 1 12h2c0-4.97 4.03-9 9-9s9 4.03 9 9h2c0-6.07-4.93-11-11-11z" />
-                                </SvgIcon>
-                            </ListItemIcon>
-                            <ListItemText primary="Pops" />
-                        </ListItem>
-                    </List>
-                    <Divider />
-                    <List>
-                        <ListSubheader inset>Saved reports</ListSubheader>
-                        <ListItem button>
-                            <ListItemIcon>
-                                <AssignmentIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Current month" />
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemIcon>
-                                <AssignmentIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Last quarter" />
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemIcon>
-                                <AssignmentIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Year-end sale" />
-                        </ListItem>
-                    </List>
-                </Drawer>
-                <main className={this.props.classes.content}>
-                    <div className={this.props.classes.appBarSpacer} />
-                    <Container maxWidth="lg" className={this.props.classes.container}>
-                        <Router history={hist}>
-                            <Switch>
-                                <Route exact={true} path="/" component={Dashboard} />
-                            </Switch>
-                        </Router>
-                    </Container>
-                    <Copyright />
-                </main>
-            </div>
+                    <div className="abs" id="bar_top">
+                        <span className="float_right" id="clock"></span>
+                        <ul>
+                            <li>
+                                <a className="menu_trigger" href="#">Home</a>
+                                <ul className="menu">
+                                    <li>
+                                        <a href="http://www.amazon.com/dp/0596159773?tag=sons-20">jQuery Cookbook</a>
+                                    </li>
+                                    <li>
+                                        <a href="http://jqueryenlightenment.com/">jQuery Enlightenment</a>
+                                    </li>
+                                    <li>
+                                        <a href="http://jquery.com/">jQuery Home</a>
+                                    </li>
+                                    <li>
+                                        <a href="http://jquerymobile.com/">jQuery Mobile</a>
+                                    </li>
+                                    <li>
+                                        <a href="http://jqueryui.com/">jQuery UI</a>
+                                    </li>
+                                    <li>
+                                        <a href="http://learningjquery.com/">Learning jQuery</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a className="menu_trigger" href="#">HTML5 Resources</a>
+                                <ul className="menu">
+                                    <li>
+                                        <a href="http://diveintohtml5.info/">Dive Into HTML5</a>
+                                    </li>
+                                    <li>
+                                        <a href="http://www.alistapart.com/articles/get-ready-for-html-5/">Get Ready for HTML5</a>
+                                    </li>
+                                    <li>
+                                        <a href="http://html5boilerplate.com/">HTML5 Boilerplate</a>
+                                    </li>
+                                    <li>
+                                        <a href="http://html5doctor.com/">HTML5 Doctor</a>
+                                    </li>
+                                    <li>
+                                        <a href="http://html5.org/">HTML5 Intro</a>
+                                    </li>
+                                    <li>
+                                        <a href="http://www.zeldman.com/superfriends/">HTML5 Super Friends</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a className="menu_trigger" href="#">Code</a>
+                                <ul className="menu">
+                                    <li>
+                                        <a href="assets/css/desktop.css">Desktop - CSS</a>
+                                    </li>
+                                    <li>
+                                        <a href="assets/js/jquery.desktop.js">Desktop - JavaScript</a>
+                                    </li>
+                                    <li>
+                                        <a href="http://github.com/nathansmith/jQuery-Desktop">GitHub Repository</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a className="menu_trigger" href="#">Credits</a>
+                                <ul className="menu">
+                                    <li>
+                                        <a href="http://sonspring.com/journal/jquery-desktop">Demo built by Nathan Smith</a>
+                                    </li>
+                                    <li>
+                                        <a href="http://twitter.com/adrianrodriguez/">Wallpaper by Adrian Rodriguez</a>
+                                    </li>
+                                    <li>
+                                        <a href="http://tango.freedesktop.org/Tango_Desktop_Project">Icons - Tango Desktop Project</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <div className="abs" id="bar_bottom">
+                        <a className="float_left" href="#" id="show_desktop" title="Show Desktop">
+                            <img src="assets/images/icons/icon_22_desktop.png" />
+                        </a>
+                        <ul id="dock">
+                            <li id="icon_dock_computer">
+                                <a href="#window_computer">
+                                    <img src="assets/images/icons/icon_22_computer.png" alt="" />
+                                    Computer
+                                </a>
+                            </li>
+                            <li id="icon_dock_drive">
+                                <a href="#window_drive">
+                                    <img src="assets/images/icons/icon_22_drive.png" alt="" />
+                                    Hard Drive
+                                </a>
+                            </li>
+                            <li id="icon_dock_disc">
+                                <a href="#window_disc">
+                                    <img src="assets/images/icons/icon_22_disc.png" alt="" />
+                                    Audio CD
+                                </a>
+                            </li>
+                            <li id="icon_dock_network">
+                                <a href="#window_network">
+                                    <img src="assets/images/icons/icon_22_network.png" alt="" />
+                                    Network
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </ div>
+            </React.Fragment>
+
         );
     }
 }
-export default withStyles(useStyles)(App);
+export default App;
